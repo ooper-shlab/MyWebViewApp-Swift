@@ -1,14 +1,16 @@
 //
 //  WebServer.swift
-//  WebWeb
+//  MyWebView
 //
-//  Created by OOPer in cooperation with shlab.jp, on 2015/8/1.
+//  Created by OOPer in cooperation with shlab.jp, on 2015/8/22.
 //
 //
 
 import UIKit
 
 let kWebServiceType = "_http._tcp"
+let kWebServiceDomain = "local."
+let kWebServiceName = UIDevice.currentDevice().name
 
 let WebServerErrorDomain = "WebServerErrorDomain"
 let kWebServerCouldNotBindToIPv4Address = 1
@@ -35,19 +37,19 @@ class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
     }
     
     func netServiceDidPublish(sender: NSNetService) {
+        NSLog(__FUNCTION__)
         self.netService = sender
     }
     func netService(sender: NSNetService, didNotPublish errorDict: [String: NSNumber]) {
+        NSLog(__FUNCTION__)
         fatalError(errorDict.description)
     }
     
     func netService(sender: NSNetService, didAcceptConnectionWithInputStream readStream: NSInputStream, outputStream writeStream: NSOutputStream) {
         NSOperationQueue.mainQueue().addOperationWithBlock {
-            let peer: String? = "Generic Peer"
-            
             CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue)
             CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue)
-            self.handleConnection(peer, inputStream: readStream, outputStream: writeStream)
+            self.handleConnection(inputStream: readStream, outputStream: writeStream)
         }
     }
     
@@ -59,7 +61,7 @@ class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
         } else {
             
             if self.netService == nil {
-                self.netService = NSNetService(domain: "local", type: kWebServiceType, name: UIDevice.currentDevice().name, port: 0)
+                self.netService = NSNetService(domain: kWebServiceDomain, type: kWebServiceType, name: kWebServiceName, port: 0)
                 self.netService?.delegate = self
             }
             
@@ -80,28 +82,68 @@ class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
         self.netService!.publishWithOptions(.ListenForConnections)
     }
     
-    func handleConnection(peerName: String?, inputStream readStream: NSInputStream, outputStream writeStream: NSOutputStream) {
+    func handleConnection(inputStream readStream: NSInputStream, outputStream writeStream: NSOutputStream) {
+        NSLog(__FUNCTION__)
         
-        assert(peerName != nil, "No peer name given for client.")
+        let newPeer = WebServerRequest(inputStream: readStream,
+            outputStream: writeStream,
+            delegate: self)
         
-        if let peer = peerName  {
-            let newPeer = WebServerRequest(inputStream: readStream,
-                outputStream: writeStream,
-                peer: peer,
-                delegate: self)
+        self.connectionBag.insert(newPeer)
             
-            newPeer.runProtocol()
-            self.connectionBag.insert(newPeer)
-            
+    }
+    
+    func webServerRequestDidFinish(request: WebServerRequest) {
+        self.connectionBag.remove(request)
+    }
+    
+    func webServerRequestDidReceiveError(request: WebServerRequest) {
+        self.connectionBag.remove(request)
+    }
+    
+    func webWerverRequestDidProcessBody(request: WebServerRequest) {
+        //
+        let receiver = request.receiver
+        let requestPath = receiver.path!
+        let requestPathURL = NSURL(string: requestPath)!
+        let path = requestPathURL.path!
+        let resourceURL = NSBundle.mainBundle().resourceURL!
+        let documentURL = resourceURL.URLByAppendingPathComponent(path)
+        var foundURL: NSURL? = nil
+        let fileManager = NSFileManager.defaultManager()
+        var isDir: ObjCBool = false
+        if fileManager.fileExistsAtPath(documentURL.path!, isDirectory: &isDir) {
+            if isDir {
+                NSLog(documentURL.path!)
+                for defPage in DEFAULTS {
+                    let url = documentURL.URLByAppendingPathComponent(defPage)
+                    if fileManager.fileExistsAtPath(url.path!) {
+                        foundURL = url
+                        break
+                    }
+                }
+            } else {
+                foundURL = documentURL
+            }
         }
-    }
-    
-    func WebServerRequestDidFinish(request: WebServerRequest) {
-        self.connectionBag.remove(request)
-    }
-    
-    func WebServerRequestDidReceiveError(request: WebServerRequest) {
-        self.connectionBag.remove(request)
+        NSLog(documentURL.path!)
+        let transmitter = request.transmitter
+        if let url = foundURL {
+            let data = NSData(contentsOfURL: url)!
+            let ext = url.pathExtension ?? ""
+            if let contentType = TYPES[ext] {
+                transmitter.headers["Content-Type"] = contentType
+            } else {
+                transmitter.headers["Content-Type"] = UNKNOWN_TYPE
+            }
+            transmitter.addResponse(data)
+        } else {
+            transmitter.headers["Content-Type"] = "text/html"
+            let responseHtml = "\(HTTPStatus.NotFound.fullDescription)<br>" +
+                "Requested resource \(path.HTMLEntitiesEncoded) does not exist on this server."
+            transmitter.addResponse(responseHtml)
+        }
+        transmitter.startTransmission()
     }
     
     func teardown() {

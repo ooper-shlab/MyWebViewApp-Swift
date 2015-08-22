@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D708F1D71B85E45B00676A1C /* HTTPStreamTransmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F1D61B85E45B00676A1C /* HTTPStreamTransmitter.swift */; };
+		D708F2251B873FF200676A1C /* HTTPConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2241B873FF200676A1C /* HTTPConstants.swift */; };
+		D708F2271B87404A00676A1C /* NSData+suffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2261B87404A00676A1C /* NSData+suffix.swift */; };
+		D708F2291B87491800676A1C /* NSMutableData+append.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2281B87491800676A1C /* NSMutableData+append.swift */; };
+		D708F22B1B8749AD00676A1C /* HTTPStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F22A1B8749AD00676A1C /* HTTPStatus.swift */; };
+		D708F22D1B875E8000676A1C /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = D708F22C1B875E8000676A1C /* index.html */; };
+		D708F2951B8882E700676A1C /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2941B8882E700676A1C /* AppConstants.swift */; };
+		D708F2971B88890D00676A1C /* String+HTML.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2961B88890D00676A1C /* String+HTML.swift */; };
+		D708F2991B888D1900676A1C /* OOPRegularExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2981B888D1900676A1C /* OOPRegularExpression.swift */; };
+		D708F29C1B889C4700676A1C /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = D708F29B1B889C4700676A1C /* LICENSE.txt */; };
 		D74873571B849E110095E42F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873561B849E110095E42F /* AppDelegate.swift */; };
 		D74873591B849E110095E42F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873581B849E110095E42F /* ViewController.swift */; };
 		D748735C1B849E110095E42F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D748735A1B849E110095E42F /* Main.storyboard */; };
@@ -18,10 +28,20 @@
 		D748736F1B84B2A20095E42F /* HTTPStreamReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D748736E1B84B2A20095E42F /* HTTPStreamReceiver.swift */; };
 		D78D18391B8527A00026F024 /* HTTPValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D18381B8527A00026F024 /* HTTPValues.swift */; };
 		D78D183B1B85284C0026F024 /* Array+opt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D183A1B85284C0026F024 /* Array+opt.swift */; };
-		D78D183D1B8528780026F024 /* RequestValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D183C1B8528780026F024 /* RequestValue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D708F1D41B853E5D00676A1C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D708F1D61B85E45B00676A1C /* HTTPStreamTransmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPStreamTransmitter.swift; sourceTree = "<group>"; };
+		D708F2241B873FF200676A1C /* HTTPConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPConstants.swift; sourceTree = "<group>"; };
+		D708F2261B87404A00676A1C /* NSData+suffix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+suffix.swift"; sourceTree = "<group>"; };
+		D708F2281B87491800676A1C /* NSMutableData+append.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableData+append.swift"; sourceTree = "<group>"; };
+		D708F22A1B8749AD00676A1C /* HTTPStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPStatus.swift; sourceTree = "<group>"; };
+		D708F22C1B875E8000676A1C /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		D708F2941B8882E700676A1C /* AppConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		D708F2961B88890D00676A1C /* String+HTML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+HTML.swift"; sourceTree = "<group>"; };
+		D708F2981B888D1900676A1C /* OOPRegularExpression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OOPRegularExpression.swift; sourceTree = "<group>"; };
+		D708F29B1B889C4700676A1C /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		D74873531B849E110095E42F /* MyWebViewApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWebViewApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D74873561B849E110095E42F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D74873581B849E110095E42F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -35,7 +55,6 @@
 		D748736E1B84B2A20095E42F /* HTTPStreamReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPStreamReceiver.swift; sourceTree = "<group>"; };
 		D78D18381B8527A00026F024 /* HTTPValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPValues.swift; sourceTree = "<group>"; };
 		D78D183A1B85284C0026F024 /* Array+opt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+opt.swift"; sourceTree = "<group>"; };
-		D78D183C1B8528780026F024 /* RequestValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestValue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,9 +68,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D708F22E1B87618800676A1C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D708F22C1B875E8000676A1C /* index.html */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		D708F29A1B888D3600676A1C /* OOPUtils */ = {
+			isa = PBXGroup;
+			children = (
+				D708F2981B888D1900676A1C /* OOPRegularExpression.swift */,
+			);
+			name = OOPUtils;
+			sourceTree = "<group>";
+		};
 		D748734A1B849E110095E42F = {
 			isa = PBXGroup;
 			children = (
+				D708F1D41B853E5D00676A1C /* README.md */,
+				D708F29B1B889C4700676A1C /* LICENSE.txt */,
 				D74873551B849E110095E42F /* MyWebViewApp */,
 				D74873541B849E110095E42F /* Products */,
 			);
@@ -72,15 +109,23 @@
 				D74873681B849F260095E42F /* WebServerRequest.swift */,
 				D748736C1B849F760095E42F /* WebClient.swift */,
 				D748736E1B84B2A20095E42F /* HTTPStreamReceiver.swift */,
+				D708F1D61B85E45B00676A1C /* HTTPStreamTransmitter.swift */,
 				D78D18381B8527A00026F024 /* HTTPValues.swift */,
+				D708F2241B873FF200676A1C /* HTTPConstants.swift */,
+				D708F22A1B8749AD00676A1C /* HTTPStatus.swift */,
+				D708F2941B8882E700676A1C /* AppConstants.swift */,
 				D78D183A1B85284C0026F024 /* Array+opt.swift */,
-				D78D183C1B8528780026F024 /* RequestValue.swift */,
+				D708F2261B87404A00676A1C /* NSData+suffix.swift */,
+				D708F2281B87491800676A1C /* NSMutableData+append.swift */,
+				D708F2961B88890D00676A1C /* String+HTML.swift */,
+				D708F29A1B888D3600676A1C /* OOPUtils */,
 				D74873561B849E110095E42F /* AppDelegate.swift */,
 				D74873581B849E110095E42F /* ViewController.swift */,
 				D748735A1B849E110095E42F /* Main.storyboard */,
 				D748735D1B849E110095E42F /* Assets.xcassets */,
 				D748735F1B849E110095E42F /* LaunchScreen.storyboard */,
 				D74873621B849E110095E42F /* Info.plist */,
+				D708F22E1B87618800676A1C /* Resources */,
 			);
 			path = MyWebViewApp;
 			sourceTree = "<group>";
@@ -143,7 +188,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D74873611B849E110095E42F /* LaunchScreen.storyboard in Resources */,
+				D708F22D1B875E8000676A1C /* index.html in Resources */,
 				D748735E1B849E110095E42F /* Assets.xcassets in Resources */,
+				D708F29C1B889C4700676A1C /* LICENSE.txt in Resources */,
 				D748735C1B849E110095E42F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -156,14 +203,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				D748736F1B84B2A20095E42F /* HTTPStreamReceiver.swift in Sources */,
+				D708F2291B87491800676A1C /* NSMutableData+append.swift in Sources */,
+				D708F2251B873FF200676A1C /* HTTPConstants.swift in Sources */,
 				D748736B1B849F4A0095E42F /* WebServer.swift in Sources */,
+				D708F2991B888D1900676A1C /* OOPRegularExpression.swift in Sources */,
 				D78D18391B8527A00026F024 /* HTTPValues.swift in Sources */,
+				D708F1D71B85E45B00676A1C /* HTTPStreamTransmitter.swift in Sources */,
+				D708F2971B88890D00676A1C /* String+HTML.swift in Sources */,
 				D74873691B849F260095E42F /* WebServerRequest.swift in Sources */,
+				D708F2271B87404A00676A1C /* NSData+suffix.swift in Sources */,
+				D708F22B1B8749AD00676A1C /* HTTPStatus.swift in Sources */,
 				D74873591B849E110095E42F /* ViewController.swift in Sources */,
 				D748736D1B849F760095E42F /* WebClient.swift in Sources */,
+				D708F2951B8882E700676A1C /* AppConstants.swift in Sources */,
 				D74873571B849E110095E42F /* AppDelegate.swift in Sources */,
 				D78D183B1B85284C0026F024 /* Array+opt.swift in Sources */,
-				D78D183D1B8528780026F024 /* RequestValue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

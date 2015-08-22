@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  MyWebViewApp
 //
-//  Created by 開発 on 2015/8/19.
+//  Created by OOPer in cooperation with shlab.jp, on 2015/8/19.
 //  Copyright © 2015 OOPer (NAGATA, Atsuyuki). All rights reserved.
 //
 

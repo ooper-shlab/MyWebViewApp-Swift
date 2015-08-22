@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  MyWebViewApp
 //
-//  Created by 開発 on 2015/8/19.
+//  Created by OOPer in cooperation with shlab.jp, on 2015/8/19.
 //  Copyright © 2015 OOPer (NAGATA, Atsuyuki). All rights reserved.
 //
 
@@ -24,22 +24,24 @@ class ViewController: UIViewController, WebClientDelegate, UIWebViewDelegate {
     }
     
     func webClient(client: WebClient, didFindDomain domain: String) {
-        webClient.searchForServicesOfType(kWebServiceType, inDomain: domain)
-    }
-    
-    func webClient(client: WebClient, didFindService service: NSNetService?) {
-        webClient.resolve(service!)
-    }
-    
-    func webClient(client: WebClient, didResolveService service: NSNetService?) {
-        if let service = service {
-            let hostName = service.hostName!
-            let port = service.port
-            let urlString = "http://\(hostName):\(port)/test.html"
-            let url = NSURL(string: urlString)!
-            let request = NSURLRequest(URL: url)
-            webView.loadRequest(request)
+        NSLog(__FUNCTION__)
+        if domain == kWebServiceDomain {
+            webClient.searchForServicesOfType(kWebServiceType, inDomain: domain, withName: kWebServiceName)
         }
+    }
+    
+    func webClient(client: WebClient, didFindService service: NSNetService) {
+        NSLog(__FUNCTION__)
+        webClient.resolve(service)
+    }
+    
+    func webClient(client: WebClient, didResolveService service: NSNetService) {
+        let hostName = service.hostName!
+        let port = service.port
+        let urlString = "http://\(hostName):\(port)"
+        let url = NSURL(string: urlString)!
+        let request = NSURLRequest(URL: url)
+        webView.loadRequest(request)
     }
     
     func webClient(client: WebClient, didNotResolveWithError error: NSError) {
