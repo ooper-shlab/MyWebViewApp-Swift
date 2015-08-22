@@ -28,6 +28,7 @@
 		D748736F1B84B2A20095E42F /* HTTPStreamReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D748736E1B84B2A20095E42F /* HTTPStreamReceiver.swift */; };
 		D78D18391B8527A00026F024 /* HTTPValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D18381B8527A00026F024 /* HTTPValues.swift */; };
 		D78D183B1B85284C0026F024 /* Array+opt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D183A1B85284C0026F024 /* Array+opt.swift */; };
+		D7AF58A01B88C9CF00CF2042 /* WebProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AF589F1B88C9CF00CF2042 /* WebProducer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		D748736E1B84B2A20095E42F /* HTTPStreamReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPStreamReceiver.swift; sourceTree = "<group>"; };
 		D78D18381B8527A00026F024 /* HTTPValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPValues.swift; sourceTree = "<group>"; };
 		D78D183A1B85284C0026F024 /* Array+opt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+opt.swift"; sourceTree = "<group>"; };
+		D7AF589F1B88C9CF00CF2042 /* WebProducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebProducer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				D748736A1B849F4A0095E42F /* WebServer.swift */,
+				D7AF589F1B88C9CF00CF2042 /* WebProducer.swift */,
 				D74873681B849F260095E42F /* WebServerRequest.swift */,
 				D748736C1B849F760095E42F /* WebClient.swift */,
 				D748736E1B84B2A20095E42F /* HTTPStreamReceiver.swift */,
@@ -215,6 +218,7 @@
 				D708F22B1B8749AD00676A1C /* HTTPStatus.swift in Sources */,
 				D74873591B849E110095E42F /* ViewController.swift in Sources */,
 				D748736D1B849F760095E42F /* WebClient.swift in Sources */,
+				D7AF58A01B88C9CF00CF2042 /* WebProducer.swift in Sources */,
 				D708F2951B8882E700676A1C /* AppConstants.swift in Sources */,
 				D74873571B849E110095E42F /* AppDelegate.swift in Sources */,
 				D78D183B1B85284C0026F024 /* Array+opt.swift in Sources */,

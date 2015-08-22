@@ -11,11 +11,14 @@ import Foundation
 @objc protocol HTTPStreamReceiverDelegate {
     optional func receiverWillProcessBody(receiver: HTTPStreamReceiver)
     optional func receiverDidProcessBody(receiver: HTTPStreamReceiver)
-    optional func receiverErrorDidOccur(receiver: HTTPStreamReceiver)
+    optional func receiver(receiver: HTTPStreamReceiver, errorDidOccur error: NSError)
 }
 
 private let BUFFER_SIZE = 1024
 private let MAXIMUM_BODY_SIZE = 20 * 1024 * 1024
+
+let kHTTPStreamReceiverErrorDomain = "kHTTPStreamReceiverErrorDomain"
+let kHTTPStreamReceiverUnknownError = 1
 
 class HTTPStreamReceiver: NSObject, NSStreamDelegate {
     
@@ -74,8 +77,9 @@ class HTTPStreamReceiver: NSObject, NSStreamDelegate {
                 tryProcessHeader()
             }
         case NSStreamEvent.ErrorOccurred:
-            NSLog("stream: %@", stream)
-            delegate?.receiverErrorDidOccur?(self)
+            let error = stream.streamError ?? NSError(domain: kHTTPStreamReceiverErrorDomain, code: kHTTPStreamReceiverUnknownError, userInfo: nil)
+            NSLog("Error:\(error.description) in input stream")
+            delegate?.receiver?(self, errorDidOccur: error)
         default:
             break
         }

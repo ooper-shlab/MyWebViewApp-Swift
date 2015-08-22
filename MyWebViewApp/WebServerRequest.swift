@@ -9,10 +9,13 @@ import UIKit
 
 @objc
 protocol WebServerRequestDelegate {
-    optional func webWerverRequestDidProcessBody(request: WebServerRequest)
+    optional func webServerRequestDidProcessBody(request: WebServerRequest)
     optional func webServerRequestDidFinish(request: WebServerRequest)
-    optional func webServerRequestDidReceiveError(request: WebServerRequest)
+    optional func webServerRequest(request: WebServerRequest, didReceiveError error: NSError)
 }
+
+let WebServerRequestErrorDomain = "WebServerRequestErrorDomain"
+let kWebServerRequestReceivedTransmissionError = 1
 
 @objc
 class WebServerRequest: NSObject, HTTPStreamReceiverDelegate, HTTPStreamTransmitterDelegate {
@@ -34,11 +37,6 @@ class WebServerRequest: NSObject, HTTPStreamReceiverDelegate, HTTPStreamTransmit
         self.transmitter.delegate = self
         self.transmitter.run()
     }
-
-    func receiverErrorDidOccur(receiver: HTTPStreamReceiver) {
-        NSLog(__FUNCTION__)
-        //
-    }
     
     func receiverWillProcessBody(receiver: HTTPStreamReceiver) {
         NSLog(__FUNCTION__)
@@ -48,12 +46,28 @@ class WebServerRequest: NSObject, HTTPStreamReceiverDelegate, HTTPStreamTransmit
     func receiverDidProcessBody(receiver: HTTPStreamReceiver) {
         NSLog(__FUNCTION__)
         dispatch_async(dispatch_get_main_queue()) {
-            self.delegate?.webWerverRequestDidProcessBody?(self)
+            self.delegate?.webServerRequestDidProcessBody?(self)
         }
     }
     
-    func transmitterErrorDidOccur(transmitter: HTTPStreamTransmitter) {
+    func receiver(receiver: HTTPStreamReceiver, errorDidOccur error: NSError) {
         NSLog(__FUNCTION__)
-        //
+        dispatch_async(dispatch_get_main_queue()) {
+            self.delegate?.webServerRequest?(self, didReceiveError: error)
+        }
+    }
+    
+    func transmitterDidFinishTransmission(transmitter: HTTPStreamTransmitter) {
+        NSLog(__FUNCTION__)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.delegate?.webServerRequestDidFinish?(self)
+        }
+    }
+    
+    func transmitter(transmitter: HTTPStreamTransmitter, errorDidOccur error: NSError) {
+        NSLog(__FUNCTION__)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.delegate?.webServerRequest?(self, didReceiveError: error)
+        }
     }
 }

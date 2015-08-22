@@ -64,14 +64,19 @@ class DataResponseProvider: ResponseProvider {
 //}
 
 @objc protocol HTTPStreamTransmitterDelegate {
-    optional func transmitterErrorDidOccur(transmitter: HTTPStreamTransmitter)
+    optional func transmitterDidFinishTransmission(transmitter: HTTPStreamTransmitter)
+    optional func transmitter(transmitter: HTTPStreamTransmitter, errorDidOccur error: NSError)
 }
+
+let kHTTPStreamTransmitterErrorDomain = "kHTTPStreamTransmitterErrorDomain"
+let kHTTPStreamTransmitterUnknownError = 1
 
 class HTTPStreamTransmitter: NSObject, NSStreamDelegate {
     private let ostream: NSOutputStream
     
     weak var delegate: HTTPStreamTransmitterDelegate?
     var transmissionStarted: Bool = false
+    var transmissionDidFinishNotified = false
     var headers: HTTPValues = HTTPValues(caseInsensitive: true)
     
     private var responses: [ResponseProvider] = []
@@ -156,8 +161,9 @@ class HTTPStreamTransmitter: NSObject, NSStreamDelegate {
                 NSLog("Output stream closed unexpectedly")
             }
         case NSStreamEvent.ErrorOccurred:
-            NSLog("Error in output stream")
-            delegate?.transmitterErrorDidOccur?(self)
+            let error = aStream.streamError ?? NSError(domain: kHTTPStreamTransmitterErrorDomain, code: kHTTPStreamTransmitterUnknownError, userInfo: nil)
+            NSLog("Error:\(error.description) in output stream")
+            delegate?.transmitter?(self, errorDidOccur: error)
         default:
             break
         }
@@ -172,6 +178,10 @@ class HTTPStreamTransmitter: NSObject, NSStreamDelegate {
                 if response.finished {
                     responses.removeFirst()
                 }
+            }
+            if !transmissionDidFinishNotified {
+                transmissionDidFinishNotified = true
+                delegate?.transmitterDidFinishTransmission?(self)
             }
         }
     }

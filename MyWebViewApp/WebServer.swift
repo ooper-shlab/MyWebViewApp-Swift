@@ -17,6 +17,8 @@ let kWebServerCouldNotBindToIPv4Address = 1
 let kWebServerCouldNotBindToIPv6Address = 2
 let kWebServerNoSocketsAvailable = 3
 let kWebServerCouldNotBindOrEstablishNetService = 4
+//
+let kWebServerDidNotPublish = 5
 
 @objc
 class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
@@ -93,57 +95,20 @@ class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
             
     }
     
+    func webServerRequestDidProcessBody(request: WebServerRequest) {
+        NSLog(__FUNCTION__)
+        let producer = WebProducer.currentProducer
+        producer.respondToRequest(request)
+    }
+    
     func webServerRequestDidFinish(request: WebServerRequest) {
+        NSLog(__FUNCTION__)
         self.connectionBag.remove(request)
     }
     
-    func webServerRequestDidReceiveError(request: WebServerRequest) {
+    func webServerRequest(request: WebServerRequest, didReceiveError error: NSError) {
+        NSLog(error.description)
         self.connectionBag.remove(request)
-    }
-    
-    func webWerverRequestDidProcessBody(request: WebServerRequest) {
-        //
-        let receiver = request.receiver
-        let requestPath = receiver.path!
-        let requestPathURL = NSURL(string: requestPath)!
-        let path = requestPathURL.path!
-        let resourceURL = NSBundle.mainBundle().resourceURL!
-        let documentURL = resourceURL.URLByAppendingPathComponent(path)
-        var foundURL: NSURL? = nil
-        let fileManager = NSFileManager.defaultManager()
-        var isDir: ObjCBool = false
-        if fileManager.fileExistsAtPath(documentURL.path!, isDirectory: &isDir) {
-            if isDir {
-                NSLog(documentURL.path!)
-                for defPage in DEFAULTS {
-                    let url = documentURL.URLByAppendingPathComponent(defPage)
-                    if fileManager.fileExistsAtPath(url.path!) {
-                        foundURL = url
-                        break
-                    }
-                }
-            } else {
-                foundURL = documentURL
-            }
-        }
-        NSLog(documentURL.path!)
-        let transmitter = request.transmitter
-        if let url = foundURL {
-            let data = NSData(contentsOfURL: url)!
-            let ext = url.pathExtension ?? ""
-            if let contentType = TYPES[ext] {
-                transmitter.headers["Content-Type"] = contentType
-            } else {
-                transmitter.headers["Content-Type"] = UNKNOWN_TYPE
-            }
-            transmitter.addResponse(data)
-        } else {
-            transmitter.headers["Content-Type"] = "text/html"
-            let responseHtml = "\(HTTPStatus.NotFound.fullDescription)<br>" +
-                "Requested resource \(path.HTMLEntitiesEncoded) does not exist on this server."
-            transmitter.addResponse(responseHtml)
-        }
-        transmitter.startTransmission()
     }
     
     func teardown() {
