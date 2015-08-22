@@ -1,6 +1,6 @@
 //
 //  NSData+suffix.swift
-//  MyWebViewApp
+//  OOPUtils
 //
 //  Created by OOPer in cooperation with shlab.jp, on 2015/8/21.
 //  Copyright © 2015 OOPer (NAGATA, Atsuyuki). All rights reserved.

@@ -79,6 +79,9 @@
 		D708F29A1B888D3600676A1C /* OOPUtils */ = {
 			isa = PBXGroup;
 			children = (
+				D78D183A1B85284C0026F024 /* Array+opt.swift */,
+				D708F2261B87404A00676A1C /* NSData+suffix.swift */,
+				D708F2281B87491800676A1C /* NSMutableData+append.swift */,
 				D708F2981B888D1900676A1C /* OOPRegularExpression.swift */,
 			);
 			name = OOPUtils;
@@ -114,9 +117,6 @@
 				D708F2241B873FF200676A1C /* HTTPConstants.swift */,
 				D708F22A1B8749AD00676A1C /* HTTPStatus.swift */,
 				D708F2941B8882E700676A1C /* AppConstants.swift */,
-				D78D183A1B85284C0026F024 /* Array+opt.swift */,
-				D708F2261B87404A00676A1C /* NSData+suffix.swift */,
-				D708F2281B87491800676A1C /* NSMutableData+append.swift */,
 				D708F2961B88890D00676A1C /* String+HTML.swift */,
 				D708F29A1B888D3600676A1C /* OOPUtils */,
 				D74873561B849E110095E42F /* AppDelegate.swift */,
