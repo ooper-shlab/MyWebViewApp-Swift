@@ -18,6 +18,9 @@ class WebProducer {
         let receiver = request.receiver
         let requestPath = receiver.path!
         let requestPathURL = NSURL(string: requestPath)!
+        if acterRespondes(request) {
+            return
+        }
         let path = requestPathURL.path!
         let resourceURL = NSBundle.mainBundle().resourceURL!
         let documentURL = resourceURL.URLByAppendingPathComponent(path)
@@ -57,4 +60,31 @@ class WebProducer {
         }
         transmitter.startTransmission()
     }
+    
+    func acterRespondes(request: WebServerRequest) -> Bool {
+        var pathComponents: [String] = NSURL(string: request.receiver.path!)!.pathComponents!
+        pathComponents.removeFirst() // remove first "/"
+        guard pathComponents.count >= 2 else {return false}
+        let method = pathComponents.popLast()! + ":"
+        print(method)
+        let className = /*WebProducer.MyNamespace +*/ "$".join(pathComponents)
+        print(className)
+        print(NSStringFromClass(bbb.self))
+        if let classObj = NSClassFromString(className) as? NSObject.Type
+        where classObj.instancesRespondToSelector(Selector(method)) {
+            let actor = classObj.init()
+            actor.performSelector(Selector(method), withObject: request)
+            return true
+        }
+        return false
+    }
+    
+    static let MyNamespace: String = {
+        let className = NSStringFromClass(WebProducer.self)
+        if let range = className.rangeOfString(".") {
+            return className.substringToIndex(range.endIndex)
+        } else {
+            return ""
+        }
+    }()
 }

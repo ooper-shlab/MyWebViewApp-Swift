@@ -38,7 +38,7 @@ class ViewController: UIViewController, WebClientDelegate, UIWebViewDelegate {
     func webClient(client: WebClient, didResolveService service: NSNetService) {
         let hostName = service.hostName!
         let port = service.port
-        let urlString = "http://\(hostName):\(port)"
+        let urlString = "http://\(hostName):\(port)/aaa/bbb/ccc"
         let url = NSURL(string: urlString)!
         let request = NSURLRequest(URL: url)
         webView.loadRequest(request)
@@ -53,4 +53,3 @@ class ViewController: UIViewController, WebClientDelegate, UIWebViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 }
-
