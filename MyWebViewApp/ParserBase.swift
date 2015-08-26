@@ -8,10 +8,10 @@
 
 import Foundation
 
-class PatternBase<S: StateType, T: TokenBase>: TokenBase {
+class PatternBase<S: StateType, T: TokenBase where S.Element == S>: TokenBase {
     
-    override init(_ string: String) {
-        super.init(string)
+    init(_ string: String) {
+        super.init(string, 0)
     }
     
     var opt: OptPattern<S, T> {
@@ -31,9 +31,13 @@ class PatternBase<S: StateType, T: TokenBase>: TokenBase {
             return SequencePattern([self, pattern])
         }
     }
+    
+    func match(parser: ParserBase<S, T>) -> [[NodeBase]] {
+        fatalError("Abstract method \(__FUNCTION__) not implemented")
+    }
 }
 
-class OptPattern<S: StateType, T:TokenBase>: PatternBase<S,T> {
+class OptPattern<S: StateType, T:TokenBase where S.Element == S>: PatternBase<S,T> {
     var basePattern: PatternBase<S,T>
     init(pattern: PatternBase<S,T>) {
         self.basePattern = pattern
@@ -41,7 +45,7 @@ class OptPattern<S: StateType, T:TokenBase>: PatternBase<S,T> {
     }
 }
 
-class AnyPattern<S: StateType, T: TokenBase>: PatternBase<S, T> {
+class AnyPattern<S: StateType, T: TokenBase where S.Element == S>: PatternBase<S, T> {
     var patterns: [PatternBase<S, T>]
     init(_ patterns: [PatternBase<S, T>]) {
         self.patterns = patterns
@@ -56,24 +60,39 @@ class AnyPattern<S: StateType, T: TokenBase>: PatternBase<S, T> {
     }
 }
 
-class NonTerminalBase<S: StateType, T: TokenBase>: PatternBase<S, T> {
+class NonTerminalBase<S: StateType, T: TokenBase where S.Element == S>: PatternBase<S, T> {
     var pattern: PatternBase<S, T>? = nil
     func addPattern(pattern: PatternBase<S, T>) {
         self.pattern = self.pattern?.or(pattern) ?? pattern
     }
-    override init(_ string: String) {
-        super.init(string)
+    //???
+    var nodeType: NodeBase.Type
+    init(_ nodeType: NodeBase.Type) {
+        self.nodeType = nodeType
+        super.init(NSStringFromClass(nodeType))
+    }
+    
+    override
+    func match(parser: ParserBase<S, T>) -> [[NodeBase]] {
+        let matches = pattern?.match(parser) ?? []
+        return matches.map {nodes in
+            return [nodeType.createNode(nodes)]
+        }
     }
 }
 
-class TerminalBase<S: StateType, T: TokenBase>: PatternBase<S, T>, StringLiteralConvertible {
+class TerminalBase<S: StateType, T: TokenBase where S.Element == S>: PatternBase<S, T> {
     var type: T.Type? = nil
-    override init(_ string: String) {
-        super.init(string)
-    }
     init(_ type: T.Type) {
         self.type = type
         super.init("")
+    }
+    
+}
+
+class Symbol<S: StateType, T: TokenBase where S.Element == S>: PatternBase<S, T>, StringLiteralConvertible {
+    override init(_ string: String) {
+        super.init(string)
     }
     required init(extendedGraphemeClusterLiteral value: String) {
         super.init(value)
@@ -84,9 +103,10 @@ class TerminalBase<S: StateType, T: TokenBase>: PatternBase<S, T>, StringLiteral
     required init(unicodeScalarLiteral value: String) {
         super.init(value)
     }
+    
 }
 
-class ToStateBase<S: StateType, T: TokenBase>:  PatternBase<S, T> {
+class ToStateBase<S: StateType, T: TokenBase where S.Element == S>:  PatternBase<S, T> {
     var state: S
     init(state: S) {
         self.state = state
@@ -94,7 +114,7 @@ class ToStateBase<S: StateType, T: TokenBase>:  PatternBase<S, T> {
     }
 }
 
-class SequencePattern<S: StateType, T: TokenBase>: PatternBase<S, T> {
+class SequencePattern<S: StateType, T: TokenBase where S.Element == S>: PatternBase<S, T> {
     var symbols: [PatternBase<S, T>]
     init(_ symbols: [PatternBase<S, T>]) {
         self.symbols = symbols
@@ -117,15 +137,32 @@ func | <S: StateType, T: TokenBase>(lhs: PatternBase<S, T>, rhs: PatternBase<S, 
     return lhs.or(rhs)
 }
 infix operator ~ {}
-func & <S: StateType, T: TokenBase>(lhs: TerminalBase<S, T>, rhs: TerminalBase<S, T>)->SequencePattern<S, T> {
+func & <S: StateType, T: TokenBase>(lhs: Symbol<S, T>, rhs: Symbol<S, T>)->SequencePattern<S, T> {
     return lhs.concat(rhs)
 }
-func & <S: StateType, T: TokenBase>(lhs: PatternBase<S, T>, rhs: TerminalBase<S, T>)->SequencePattern<S, T> {
+func & <S: StateType, T: TokenBase>(lhs: PatternBase<S, T>, rhs: Symbol<S, T>)->SequencePattern<S, T> {
     return lhs.concat(rhs)
 }
-func & <S: StateType, T: TokenBase>(lhs: TerminalBase<S, T>, rhs: PatternBase<S, T>)->SequencePattern<S, T> {
+func & <S: StateType, T: TokenBase>(lhs: Symbol<S, T>, rhs: PatternBase<S, T>)->SequencePattern<S, T> {
     return lhs.concat(rhs)
 }
 func & <S: StateType, T: TokenBase>(lhs: PatternBase<S, T>, rhs: PatternBase<S, T>)->SequencePattern<S, T> {
     return lhs.concat(rhs)
+}
+
+class ParserBase<S: StateType, T: TokenBase where S.Element == S> {
+    var tokenizerStates: [S] = []
+    typealias ParserState = (S, Int)
+    var parserStates: [ParserState] = []
+    func setup() {
+        fatalError("Abstract method \(__FUNCTION__) not implemented")
+    }
+    
+    func parse(nt: NonTerminalBase<S, T>) -> NodeBase {
+        assert(nt.pattern != nil)
+        let matches = nt.pattern!.match(self)
+        if matches.count > 1 {
+            
+        }
+    }
 }

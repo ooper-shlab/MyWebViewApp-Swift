@@ -35,19 +35,19 @@ import Foundation
 */
 class Token: TokenBase {}
 
-class HTMLText: Token {
+class HTMLTextToken: Token {
     
 }
 
-class Identifier: Token {
-    class func createInstance(string: String) -> Token {
+class IdentifierToken: Token {
+    class func createInstance(string: String, _ position: Int) -> Token {
         switch string {
         case "if":
-            return IfToken(string)
+            return IfToken(string, position)
         case "for":
-            return ForToken(string)
+            return ForToken(string, position)
         default:
-            return Identifier(string)
+            return IdentifierToken(string, position)
         }
     }
     
@@ -88,9 +88,9 @@ struct LexicalState: StateType {
     static let Initial: LexicalState = .HTML
 }
 let lexicalSyntax: [Tokenizer.TokenDefs] = [
-    ("((?:[^`]|``)+)", .HTML, {HTMLText($0)}),
-    ("((?:[^`*]|``|\\*[^)])+)", .Comment, {HTMLText($0)}),
-    ("`([_a-zA-Z][_a-zA-Z0-9]*)", .HTML, {Identifier.createInstance($0)}),
+    ("((?:[^`]|``)+)", .HTML, {HTMLTextToken($0)}),
+    ("((?:[^`*]|``|\\*[^)])+)", .Comment, {HTMLTextToken($0)}),
+    ("`([_a-zA-Z][_a-zA-Z0-9]*)", .HTML, {IdentifierToken.createInstance($0)}),
     ("`(\\(\\*)", [.HTML, .Comment], {CommentStart($0)}),
     ("`(\\()", [.HTML, .Comment], {LeftParenthesis($0)}),
     ("(\\()", [.Expression, .Simple], {LeftParenthesis($0)}),
@@ -101,7 +101,5 @@ let lexicalSyntax: [Tokenizer.TokenDefs] = [
 //        return (nest, CommentEnd(string))
 //    }),
 ]
-class Tokenizer: TokenizerBase<LexicalState> {
-    
-    var currenState: LexicalState = .Initial
+class Tokenizer: TokenizerBase<LexicalState, Token> {
 }

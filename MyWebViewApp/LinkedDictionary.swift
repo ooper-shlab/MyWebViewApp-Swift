@@ -8,9 +8,9 @@
 
 import Foundation
 
-class LinkedElement<Element> {
-    weak var previous: LinkedElement<Element>?
-    var next: LinkedElement<Element>?
+class LinkedEntry<Element> {
+    weak var previous: LinkedEntry<Element>?
+    var next: LinkedEntry<Element>?
     var element: Element
     init(element: Element) {
         self.element = element
@@ -18,10 +18,10 @@ class LinkedElement<Element> {
 }
 
 private class LinkedList<Element> {
-    var first: LinkedElement<Element>?
-    weak var last: LinkedElement<Element>?
+    var first: LinkedEntry<Element>?
+    weak var last: LinkedEntry<Element>?
     
-    func remove(link: LinkedElement<Element>) {
+    func remove(link: LinkedEntry<Element>) {
         if let prev = link.previous {
             prev.next = link.next
         }
@@ -34,7 +34,9 @@ private class LinkedList<Element> {
             first = link.next
         }
     }
-    func append(link: LinkedElement<Element>) {
+    
+    
+    func append(link: LinkedEntry<Element>) {
         link.previous = last
         last?.next = link
         last = link
@@ -42,103 +44,80 @@ private class LinkedList<Element> {
             first = link
         }
     }
+    
+    
     func append(element: Element) {
-        let link = LinkedElement(element: element)
+        let link = LinkedEntry(element: element)
         append(link)
+    }
+    
+    func makeCopy() -> LinkedList<Element> {
+        let newLinkedList = LinkedList<Element>()
+        for var p = self.first; p != nil; p = p!.next {
+            newLinkedList.append(p!.element)
+        }
+        return newLinkedList
     }
 }
 
 struct LinkedDictionary<Key: Hashable, Value>: DictionaryLiteralConvertible, SequenceType {
-    var baseDictionary: [Key: LinkedElement<(Key, Value)>] = [:]
+    private var baseDictionary: [Key: LinkedEntry<(Key, Value)>] = [:]
     private var linkedList = LinkedList<(Key,Value)>()
+
+    private var movesToLastOnUpdate: Bool = false
+    
     init() {}
+    
     init(dictionaryLiteral elements: (Key, Value)...) {
         baseDictionary = Dictionary(minimumCapacity: elements.count)
         for (key, value) in elements {
             self[key] = value
         }
     }
+    
     subscript(key: Key) -> Value? {
         get {
             return baseDictionary[key]?.element.1
         }
         set(value) {
             assert(value != nil)
-            self = self.mutatingSelf
-            if let link = baseDictionary[key] {
-                linkedList.remove(link)
-                linkedList.append(link)
+            self.mutatingSelf
+            if let entry = baseDictionary[key] {
+                if movesToLastOnUpdate {
+                    linkedList.remove(entry)
+                    linkedList.append(entry)
+                } else {
+                    entry.element = (key, value!)
+                }
             } else {
                 linkedList.append((key, value!))
                 baseDictionary[key] = linkedList.last!
             }
-            self = mutatingSelf
         }
     }
+    
     func generate() -> LinkedDictionaryGenerator<Key, Value> {
         return LinkedDictionaryGenerator(base: self)
     }
+    
     var mutatingSelf: LinkedDictionary<Key, Value>  {
         mutating get {
-            if isUniquelyReferencedNonObjC(&linkedList) {
-                return self
-            } else {
-                var result = LinkedDictionary()
-                for (key, value) in self {
-                    result[key] = value
-                }
-                return self
+            if !isUniquelyReferencedNonObjC(&linkedList) {
+                self.linkedList = self.linkedList.makeCopy()
             }
+            return self
         }
     }
 }
-/*
-- (BOOL)getObjectValue:(id *)obj forString:(NSString *)string errorDescription:(NSString  **)error {
-    
-    float floatResult;
-    NSScanner *scanner;
-    BOOL returnValue = NO;
-    
-    scanner = [NSScanner scannerWithString: string];
-    [scanner scanString: @"$" intoString: NULL];    //ignore  return value
-    if ([scanner scanFloat:&floatResult] && ([scanner isAtEnd])) {
-        returnValue = YES;
-        if (obj)
-        *obj = [NSNumber numberWithFloat:floatResult];
-    } else {
-        if (error)
-        *error = NSLocalizedString(@"Couldn’t convert  to float", @"Error converting");
-    }
-    return returnValue;
-}
-*/
-class MyFormatter: NSFormatter {
-    override func getObjectValue(obj: AutoreleasingUnsafeMutablePointer<AnyObject?>, forString string: String, errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>) -> Bool {
-        var floatResult: Float = Float()
-        var returnValue: Bool = false
-        
-        let scanner = NSScanner(string: string)
-        scanner.scanString("$", intoString: nil)
-        if scanner.scanFloat(&floatResult) && scanner.atEnd {
-            returnValue = true
-            if obj != nil {
-                obj.memory = NSNumber(float: floatResult)
-            }
-        } else {
-            if error != nil {
-                error.memory = NSLocalizedString("Couldn’t convert  to float", comment: "Error converting")
-            }
-        }
-        return returnValue
-    }
-}
+
+
 struct LinkedDictionaryGenerator<Key: Hashable, Value>: GeneratorType {
     var base: LinkedDictionary<Key, Value>
     init(base: LinkedDictionary<Key, Value>) {
         self.base = base
         current = base.linkedList.first
     }
-    private var current: LinkedElement<(Key, Value)>?
+    private var current: LinkedEntry<(Key, Value)>?
     mutating func next() -> (Key, Value)? {
         if let currentLink = current {
             current = currentLink.next

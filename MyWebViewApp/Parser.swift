@@ -8,38 +8,34 @@
 
 import Foundation
 
-class Parser: PatternBase<LexicalState, Token> {
-    
+class NonTerminal: NonTerminalBase<LexicalState, Token> {
+    override init(_ nodeType: NodeBase.Type) {
+        super.init(nodeType)
+    }
 }
 
-class NonTerminal: NonTerminalBase<LexicalState, Token> {
-    //??? Why this cannot be inherited?
-    override init(_ string: String) {
-        super.init(string)
-    }
-}
-final class Terminal: TerminalBase<LexicalState, Token> {
-    required init(extendedGraphemeClusterLiteral value: String) {
-        super.init(value)
-    }
-    required init(stringLiteral value: String) {
-        super.init(value)
-    }
-    required init(unicodeScalarLiteral value: String) {
-        super.init(value)
-    }
-    override init(_ string: String) {
-        super.init(string)
-    }
+class Terminal: TerminalBase<LexicalState, Token> {
     override init(_ type: Token.Type) {
         super.init(type)
     }
 }
-let Expression = NonTerminal("Expression")
-let PrefixExpression = NonTerminal("PrefixExpression")
-let BinaryExpression = NonTerminal("BinaryExpression")
-let ExpressionList = NonTerminal("ExpressionList")
-func test() {
-    Expression |=> PrefixExpression & BinaryExpression.opt
-    ExpressionList |=> Expression & ("," & ExpressionList).opt
+
+let Expression = NonTerminal(ExpressionNode)
+let PrefixExpression = NonTerminal(PrefixExpressionNode)
+let BinaryExpression = NonTerminal(BinaryExpressionNode)
+//let ExpressionList = NonTerminal("ExpressionList")
+let PrefixOperator = NonTerminal(PrefixOperatorNode)
+//let InOutExpression = NonTerminal("InOutExpression")
+//let TryOperaotr = NonTerminal("TryOperaotr")
+
+class Parser: ParserBase<LexicalState, Token> {
+    override func setup() {
+        Expression |=> PrefixExpression & BinaryExpression.opt
+//        ExpressionList |=> Expression & ("," & ExpressionList).opt
+        PrefixExpression |=> PrefixOperator.opt & PrefixExpression
+//        PrefixExpression |=> InOutExpression
+//        InOutExpression |=> "&" & Terminal(IdentifierToken)
+//        TryOperaotr |=> "try" & Symbol("!").opt
+    }
+    
 }

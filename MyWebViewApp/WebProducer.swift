@@ -67,7 +67,7 @@ class WebProducer {
         guard pathComponents.count >= 2 else {return false}
         let method = pathComponents.popLast()! + ":"
         print(method)
-        let className = /*WebProducer.MyNamespace +*/ "$".join(pathComponents)
+        let className = /*WebProducer.MyNamespace +*/ pathComponents.joinWithSeparator("$")
         print(className)
         print(NSStringFromClass(bbb.self))
         if let classObj = NSClassFromString(className) as? NSObject.Type

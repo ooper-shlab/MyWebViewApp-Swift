@@ -18,6 +18,7 @@
 		D708F2991B888D1900676A1C /* OOPRegularExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2981B888D1900676A1C /* OOPRegularExpression.swift */; };
 		D708F29C1B889C4700676A1C /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = D708F29B1B889C4700676A1C /* LICENSE.txt */; };
 		D70D034A1B8A80A80041D63F /* aaa.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D03491B8A80A70041D63F /* aaa.swift */; };
+		D70D03521B8B79340041D63F /* WebTemplateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D03511B8B79340041D63F /* WebTemplateTests.swift */; };
 		D73DB2361B8A0EB200FA8181 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73DB2351B8A0EB200FA8181 /* Parser.swift */; };
 		D74873571B849E110095E42F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873561B849E110095E42F /* AppDelegate.swift */; };
 		D74873591B849E110095E42F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873581B849E110095E42F /* ViewController.swift */; };
@@ -35,7 +36,19 @@
 		D7AF58A51B89694F00CF2042 /* TokenizerBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AF58A31B89694F00CF2042 /* TokenizerBase.swift */; };
 		D7CAA4831B89DCFB000B0DDE /* ParserBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CAA4821B89DCFB000B0DDE /* ParserBase.swift */; };
 		D7CAA4981B89ED23000B0DDE /* LinkedDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CAA4971B89ED23000B0DDE /* LinkedDictionary.swift */; };
+		D7E3EB461B8E1EF500448CD1 /* NodeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E3EB451B8E1EF500448CD1 /* NodeBase.swift */; settings = {ASSET_TAGS = (); }; };
+		D7E3EB481B8E249600448CD1 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E3EB471B8E249600448CD1 /* Node.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D70D03541B8B79340041D63F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D748734B1B849E110095E42F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D74873521B849E110095E42F;
+			remoteInfo = MyWebViewApp;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		D708F1D41B853E5D00676A1C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -50,6 +63,9 @@
 		D708F2981B888D1900676A1C /* OOPRegularExpression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OOPRegularExpression.swift; sourceTree = "<group>"; };
 		D708F29B1B889C4700676A1C /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		D70D03491B8A80A70041D63F /* aaa.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = aaa.swift; sourceTree = "<group>"; };
+		D70D034F1B8B79340041D63F /* MyWebViewAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyWebViewAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D70D03511B8B79340041D63F /* WebTemplateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebTemplateTests.swift; sourceTree = "<group>"; };
+		D70D03531B8B79340041D63F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D73DB2351B8A0EB200FA8181 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		D74873531B849E110095E42F /* MyWebViewApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWebViewApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D74873561B849E110095E42F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,9 +85,18 @@
 		D7AF58A31B89694F00CF2042 /* TokenizerBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenizerBase.swift; sourceTree = "<group>"; };
 		D7CAA4821B89DCFB000B0DDE /* ParserBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserBase.swift; sourceTree = "<group>"; };
 		D7CAA4971B89ED23000B0DDE /* LinkedDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedDictionary.swift; sourceTree = "<group>"; };
+		D7E3EB451B8E1EF500448CD1 /* NodeBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeBase.swift; sourceTree = "<group>"; };
+		D7E3EB471B8E249600448CD1 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D70D034C1B8B79340041D63F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D74873501B849E110095E42F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -110,12 +135,22 @@
 			name = Acters;
 			sourceTree = "<group>";
 		};
+		D70D03501B8B79340041D63F /* MyWebViewAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				D70D03511B8B79340041D63F /* WebTemplateTests.swift */,
+				D70D03531B8B79340041D63F /* Info.plist */,
+			);
+			path = MyWebViewAppTests;
+			sourceTree = "<group>";
+		};
 		D748734A1B849E110095E42F = {
 			isa = PBXGroup;
 			children = (
 				D708F1D41B853E5D00676A1C /* README.md */,
 				D708F29B1B889C4700676A1C /* LICENSE.txt */,
 				D74873551B849E110095E42F /* MyWebViewApp */,
+				D70D03501B8B79340041D63F /* MyWebViewAppTests */,
 				D74873541B849E110095E42F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -124,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				D74873531B849E110095E42F /* MyWebViewApp.app */,
+				D70D034F1B8B79340041D63F /* MyWebViewAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -161,8 +197,10 @@
 			children = (
 				D7AF58A21B89694F00CF2042 /* Tokenizer.swift */,
 				D7AF58A31B89694F00CF2042 /* TokenizerBase.swift */,
-				D7CAA4821B89DCFB000B0DDE /* ParserBase.swift */,
 				D73DB2351B8A0EB200FA8181 /* Parser.swift */,
+				D7CAA4821B89DCFB000B0DDE /* ParserBase.swift */,
+				D7E3EB471B8E249600448CD1 /* Node.swift */,
+				D7E3EB451B8E1EF500448CD1 /* NodeBase.swift */,
 			);
 			name = WebTemplate;
 			sourceTree = "<group>";
@@ -170,6 +208,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D70D034E1B8B79340041D63F /* MyWebViewAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D70D03561B8B79340041D63F /* Build configuration list for PBXNativeTarget "MyWebViewAppTests" */;
+			buildPhases = (
+				D70D034B1B8B79340041D63F /* Sources */,
+				D70D034C1B8B79340041D63F /* Frameworks */,
+				D70D034D1B8B79340041D63F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D70D03551B8B79340041D63F /* PBXTargetDependency */,
+			);
+			name = MyWebViewAppTests;
+			productName = MyWebViewAppTests;
+			productReference = D70D034F1B8B79340041D63F /* MyWebViewAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		D74873521B849E110095E42F /* MyWebViewApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D74873651B849E110095E42F /* Build configuration list for PBXNativeTarget "MyWebViewApp" */;
@@ -196,6 +252,10 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "OOPer (NAGATA, Atsuyuki)";
 				TargetAttributes = {
+					D70D034E1B8B79340041D63F = {
+						CreatedOnToolsVersion = 7.0;
+						TestTargetID = D74873521B849E110095E42F;
+					};
 					D74873521B849E110095E42F = {
 						CreatedOnToolsVersion = 7.0;
 					};
@@ -215,11 +275,19 @@
 			projectRoot = "";
 			targets = (
 				D74873521B849E110095E42F /* MyWebViewApp */,
+				D70D034E1B8B79340041D63F /* MyWebViewAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D70D034D1B8B79340041D63F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D74873511B849E110095E42F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -235,10 +303,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D70D034B1B8B79340041D63F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D70D03521B8B79340041D63F /* WebTemplateTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D748734F1B849E110095E42F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7E3EB481B8E249600448CD1 /* Node.swift in Sources */,
 				D7AF58A51B89694F00CF2042 /* TokenizerBase.swift in Sources */,
 				D748736F1B84B2A20095E42F /* HTTPStreamReceiver.swift in Sources */,
 				D70D034A1B8A80A80041D63F /* aaa.swift in Sources */,
@@ -257,6 +334,7 @@
 				D708F22B1B8749AD00676A1C /* HTTPStatus.swift in Sources */,
 				D74873591B849E110095E42F /* ViewController.swift in Sources */,
 				D748736D1B849F760095E42F /* WebClient.swift in Sources */,
+				D7E3EB461B8E1EF500448CD1 /* NodeBase.swift in Sources */,
 				D7CAA4981B89ED23000B0DDE /* LinkedDictionary.swift in Sources */,
 				D7AF58A01B88C9CF00CF2042 /* WebProducer.swift in Sources */,
 				D708F2951B8882E700676A1C /* AppConstants.swift in Sources */,
@@ -266,6 +344,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D70D03551B8B79340041D63F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D74873521B849E110095E42F /* MyWebViewApp */;
+			targetProxy = D70D03541B8B79340041D63F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D748735A1B849E110095E42F /* Main.storyboard */ = {
@@ -287,6 +373,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D70D03571B8B79340041D63F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = MyWebViewAppTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.oopers.MyWebViewAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyWebViewApp.app/MyWebViewApp";
+			};
+			name = Debug;
+		};
+		D70D03581B8B79340041D63F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = MyWebViewAppTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.oopers.MyWebViewAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyWebViewApp.app/MyWebViewApp";
+			};
+			name = Release;
+		};
 		D74873631B849E110095E42F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -393,6 +505,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D70D03561B8B79340041D63F /* Build configuration list for PBXNativeTarget "MyWebViewAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D70D03571B8B79340041D63F /* Debug */,
+				D70D03581B8B79340041D63F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D748734E1B849E110095E42F /* Build configuration list for PBXProject "MyWebViewApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

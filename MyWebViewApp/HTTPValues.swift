@@ -9,7 +9,8 @@
 import Foundation
 
 public typealias HTTPValueItem = (name: String, value: String?)
-public class HTTPValues: CustomStringConvertible, SequenceType {
+
+public class HTTPValues: CustomStringConvertible, SequenceType,DictionaryLiteralConvertible {
     public typealias Generator = Array<HTTPValueItem>.Generator
     let caseInsensitive: Bool
     private var scalarMapping: [String: String?] = [:]
@@ -32,8 +33,11 @@ public class HTTPValues: CustomStringConvertible, SequenceType {
                 forName: name.stringByRemovingPercentEncoding!)
         }
     }
-    init(caseInsensitive: Bool = true) {
+    init(caseInsensitive: Bool) {
         self.caseInsensitive = caseInsensitive
+    }
+    convenience init() {
+        self.init(caseInsensitive: false)
     }
     
     public func append(item: HTTPValueItem) {
@@ -100,5 +104,12 @@ public class HTTPValues: CustomStringConvertible, SequenceType {
     
     public func generate() -> Generator {
         return items.generate()
+    }
+    
+    public required init(dictionaryLiteral elements: (String, String?)...) {
+        self.caseInsensitive = false
+        for (name, value) in elements {
+            self.append(value, forName: name)
+        }
     }
 }
