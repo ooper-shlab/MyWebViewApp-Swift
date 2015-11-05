@@ -46,6 +46,22 @@ class HTTPStreamReceiver: NSObject, NSStreamDelegate {
     var path: String?
     var httpVersion: String?
     
+    private var _query: HTTPValues? = nil
+    var query: HTTPValues {
+        if _query != nil {
+            if let
+                path = self.path,
+                component = NSURLComponents(string: path),
+                queryString = component.query
+            {
+                _query = HTTPValues(query: queryString)
+            } else {
+                _query = HTTPValues()
+            }
+        }
+        return _query!
+    }
+    
     init(istream: NSInputStream) {
         self.istream = istream
         super.init()

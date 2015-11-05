@@ -158,11 +158,11 @@ class ParserBase<S: StateType, T: TokenBase where S.Element == S> {
         fatalError("Abstract method \(__FUNCTION__) not implemented")
     }
     
-    func parse(nt: NonTerminalBase<S, T>) -> NodeBase {
-        assert(nt.pattern != nil)
-        let matches = nt.pattern!.match(self)
-        if matches.count > 1 {
-            
-        }
-    }
+//    func parse(nt: NonTerminalBase<S, T>) -> NodeBase {
+//        assert(nt.pattern != nil)
+//        let matches = nt.pattern!.match(self)
+//        if matches.count > 1 {
+//            
+//        }
+//    }
 }

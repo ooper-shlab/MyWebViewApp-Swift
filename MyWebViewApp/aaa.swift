@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc(aaa$bbb)
+@objc(__$aaa$bbb)
 class bbb: NSObject {
     func ccc(request: WebServerRequest) {
         request.transmitter.addResponse(__FUNCTION__+" method called")

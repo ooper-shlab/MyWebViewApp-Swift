@@ -24,6 +24,8 @@ class WebServerRequest: NSObject, HTTPStreamReceiverDelegate, HTTPStreamTransmit
     var transmitter: HTTPStreamTransmitter
     weak var delegate: WebServerRequestDelegate?
     
+    var userInfo: [String: AnyObject] = [:]
+    
     init(inputStream readStream: NSInputStream,
         outputStream writeStream: NSOutputStream,
         delegate anObject: WebServerRequestDelegate)

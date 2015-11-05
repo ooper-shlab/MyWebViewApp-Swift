@@ -19,6 +19,7 @@
 		D708F29C1B889C4700676A1C /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = D708F29B1B889C4700676A1C /* LICENSE.txt */; };
 		D70D034A1B8A80A80041D63F /* aaa.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D03491B8A80A70041D63F /* aaa.swift */; };
 		D70D03521B8B79340041D63F /* WebTemplateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D03511B8B79340041D63F /* WebTemplateTests.swift */; };
+		D71156061BEB862200E9F95B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D71156051BEB862200E9F95B /* Default-568h@2x.png */; };
 		D73DB2361B8A0EB200FA8181 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73DB2351B8A0EB200FA8181 /* Parser.swift */; };
 		D74873571B849E110095E42F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873561B849E110095E42F /* AppDelegate.swift */; };
 		D74873591B849E110095E42F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873581B849E110095E42F /* ViewController.swift */; };
@@ -36,8 +37,8 @@
 		D7AF58A51B89694F00CF2042 /* TokenizerBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AF58A31B89694F00CF2042 /* TokenizerBase.swift */; };
 		D7CAA4831B89DCFB000B0DDE /* ParserBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CAA4821B89DCFB000B0DDE /* ParserBase.swift */; };
 		D7CAA4981B89ED23000B0DDE /* LinkedDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7CAA4971B89ED23000B0DDE /* LinkedDictionary.swift */; };
-		D7E3EB461B8E1EF500448CD1 /* NodeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E3EB451B8E1EF500448CD1 /* NodeBase.swift */; settings = {ASSET_TAGS = (); }; };
-		D7E3EB481B8E249600448CD1 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E3EB471B8E249600448CD1 /* Node.swift */; settings = {ASSET_TAGS = (); }; };
+		D7E3EB461B8E1EF500448CD1 /* NodeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E3EB451B8E1EF500448CD1 /* NodeBase.swift */; };
+		D7E3EB481B8E249600448CD1 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E3EB471B8E249600448CD1 /* Node.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		D70D034F1B8B79340041D63F /* MyWebViewAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyWebViewAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D70D03511B8B79340041D63F /* WebTemplateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebTemplateTests.swift; sourceTree = "<group>"; };
 		D70D03531B8B79340041D63F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D71156051BEB862200E9F95B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D73DB2351B8A0EB200FA8181 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		D74873531B849E110095E42F /* MyWebViewApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWebViewApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D74873561B849E110095E42F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 		D748734A1B849E110095E42F = {
 			isa = PBXGroup;
 			children = (
+				D71156051BEB862200E9F95B /* Default-568h@2x.png */,
 				D708F1D41B853E5D00676A1C /* README.md */,
 				D708F29B1B889C4700676A1C /* LICENSE.txt */,
 				D74873551B849E110095E42F /* MyWebViewApp */,
@@ -297,6 +300,7 @@
 				D748735E1B849E110095E42F /* Assets.xcassets in Resources */,
 				D708F29C1B889C4700676A1C /* LICENSE.txt in Resources */,
 				D748735C1B849E110095E42F /* Main.storyboard in Resources */,
+				D71156061BEB862200E9F95B /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

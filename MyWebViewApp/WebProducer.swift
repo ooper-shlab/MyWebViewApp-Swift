@@ -8,6 +8,7 @@
 
 import Foundation
 
+let ACTER_PREFIX = "__$"
 class WebProducer {
     private(set) static var _producer: WebProducer = WebProducer()
     class var currentProducer: WebProducer {
@@ -18,7 +19,7 @@ class WebProducer {
         let receiver = request.receiver
         let requestPath = receiver.path!
         let requestPathURL = NSURL(string: requestPath)!
-        if acterRespondes(request) {
+        if acterResponds(request) {
             return
         }
         let path = requestPathURL.path!
@@ -61,13 +62,13 @@ class WebProducer {
         transmitter.startTransmission()
     }
     
-    func acterRespondes(request: WebServerRequest) -> Bool {
+    func acterResponds(request: WebServerRequest) -> Bool {
         var pathComponents: [String] = NSURL(string: request.receiver.path!)!.pathComponents!
         pathComponents.removeFirst() // remove first "/"
         guard pathComponents.count >= 2 else {return false}
         let method = pathComponents.popLast()! + ":"
         print(method)
-        let className = /*WebProducer.MyNamespace +*/ pathComponents.joinWithSeparator("$")
+        let className = ACTER_PREFIX + pathComponents.joinWithSeparator("$")
         print(className)
         print(NSStringFromClass(bbb.self))
         if let classObj = NSClassFromString(className) as? NSObject.Type
@@ -78,13 +79,4 @@ class WebProducer {
         }
         return false
     }
-    
-    static let MyNamespace: String = {
-        let className = NSStringFromClass(WebProducer.self)
-        if let range = className.rangeOfString(".") {
-            return className.substringToIndex(range.endIndex)
-        } else {
-            return ""
-        }
-    }()
 }
