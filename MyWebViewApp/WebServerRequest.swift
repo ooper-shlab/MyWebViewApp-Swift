@@ -1,9 +1,9 @@
 //
 //  WebServerRequest.swift
-//  MyWebView
+//  MyWebViewApp
 //
 //  Created by OOPer in cooperation with shlab.jp, on 2015/8/22.
-//
+//  Copyright © 2015 OOPer (NAGATA, Atsuyuki). All rights reserved. See LICENSE.txt .
 //
 import UIKit
 
