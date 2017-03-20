@@ -9,9 +9,9 @@
 import Foundation
 
 @objc protocol HTTPStreamReceiverDelegate {
-    optional func receiverWillProcessBody(receiver: HTTPStreamReceiver)
-    optional func receiverDidProcessBody(receiver: HTTPStreamReceiver)
-    optional func receiver(receiver: HTTPStreamReceiver, errorDidOccur error: NSError)
+    @objc optional func receiverWillProcessBody(_ receiver: HTTPStreamReceiver)
+    @objc optional func receiverDidProcessBody(_ receiver: HTTPStreamReceiver)
+    @objc optional func receiver(_ receiver: HTTPStreamReceiver, errorDidOccur error: NSError)
 }
 
 private let BUFFER_SIZE = 1024
@@ -20,21 +20,21 @@ private let MAXIMUM_BODY_SIZE = 20 * 1024 * 1024
 let kHTTPStreamReceiverErrorDomain = "kHTTPStreamReceiverErrorDomain"
 let kHTTPStreamReceiverUnknownError = 1
 
-class HTTPStreamReceiver: NSObject, NSStreamDelegate {
+class HTTPStreamReceiver: NSObject, StreamDelegate {
     
-    let istream: NSInputStream
+    let istream: InputStream
     weak var delegate: HTTPStreamReceiverDelegate?
     
-    let headerData = NSMutableData(capacity: BUFFER_SIZE)!
-    private(set) var headerFinished: Bool = false
+    var headerData = Data(capacity: BUFFER_SIZE)
+    fileprivate(set) var headerFinished: Bool = false
     var headerProcessingStarted: Bool = false
     var headerProcessed: Bool = false
-    private(set) var endOfHeader = 0
+    fileprivate(set) var endOfHeader = 0
     
-    let bodyData = NSMutableData()
+    var bodyData = Data()
     var bodyProcessingStarted: Bool = false
     var bodyProcessed: Bool = false
-    private(set) var bodyFinished: Bool = false
+    fileprivate(set) var bodyFinished: Bool = false
     var estimatedBodyLength: Int = MAXIMUM_BODY_SIZE {
         didSet {
             tryProcessBody()
@@ -46,13 +46,13 @@ class HTTPStreamReceiver: NSObject, NSStreamDelegate {
     var path: String?
     var httpVersion: String?
     
-    private var _query: HTTPValues? = nil
+    fileprivate var _query: HTTPValues? = nil
     var query: HTTPValues {
         if _query != nil {
             if let
                 path = self.path,
-                component = NSURLComponents(string: path),
-                queryString = component.query
+                let component = URLComponents(string: path),
+                let queryString = component.query
             {
                 _query = HTTPValues(query: queryString)
             } else {
@@ -62,40 +62,40 @@ class HTTPStreamReceiver: NSObject, NSStreamDelegate {
         return _query!
     }
     
-    init(istream: NSInputStream) {
+    init(istream: InputStream) {
         self.istream = istream
         super.init()
         istream.delegate = self
     }
     
     deinit {
-        self.istream.removeFromRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+        self.istream.remove(from: RunLoop.current, forMode: RunLoopMode.commonModes)
         self.istream.close()
     }
     
     func run() {
-        NSLog(__FUNCTION__)
-        istream.scheduleInRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+        NSLog(#function)
+        istream.schedule(in: RunLoop.current, forMode: RunLoopMode.commonModes)
         istream.open()
         self.receive()
     }
     
-    func stream(stream: NSStream, handleEvent eventCode: NSStreamEvent) {
-        NSLog(__FUNCTION__)
+    func stream(_ stream: Stream, handle eventCode: Stream.Event) {
+        NSLog(#function)
         switch eventCode {
-        case NSStreamEvent.HasBytesAvailable:
+        case Stream.Event.hasBytesAvailable:
             if istream === self.istream {
                 self.receive()
             }
-        case NSStreamEvent.EndEncountered:
+        case Stream.Event.endEncountered:
             if  stream == self.istream {
                 endReceive()
                 tryProcessHeader()
             }
-        case NSStreamEvent.ErrorOccurred:
+        case Stream.Event.errorOccurred:
             let error = stream.streamError ?? NSError(domain: kHTTPStreamReceiverErrorDomain, code: kHTTPStreamReceiverUnknownError, userInfo: nil)
-            NSLog("Error:\(error.description) in input stream")
-            delegate?.receiver?(self, errorDidOccur: error)
+            NSLog("Error:\(error) in input stream")
+            delegate?.receiver?(self, errorDidOccur: error as NSError)
         default:
             break
         }
@@ -103,8 +103,8 @@ class HTTPStreamReceiver: NSObject, NSStreamDelegate {
     
     
     func receive() {
-        NSLog(__FUNCTION__)
-        var buffer: [UInt8] = Array(count: BUFFER_SIZE, repeatedValue: 0)
+        NSLog(#function)
+        var buffer: [UInt8] = Array(repeating: 0, count: BUFFER_SIZE)
         while istream.hasBytesAvailable && !bodyFinished {
             let len = self.istream.read(&buffer, maxLength: BUFFER_SIZE)
             if headerFinished {
@@ -120,48 +120,47 @@ class HTTPStreamReceiver: NSObject, NSStreamDelegate {
     }
     
     func endReceive() {
-        NSLog(__FUNCTION__)
+        NSLog(#function)
         istream.close()
         bodyFinished = true
     }
     
-    func appendHeader(bufferPtr: UnsafePointer<UInt8>, length: Int) {
-        NSLog(__FUNCTION__)
+    func appendHeader(_ bufferPtr: UnsafePointer<UInt8>, length: Int) {
+        NSLog(#function)
         print("length=\(length)")
-            headerData.appendBytes(bufferPtr, length: length)
-        let emptyLine = headerData.rangeOfData(emptyLineData, options: [], range: NSRange(endOfHeader..<headerData.length))
-        if emptyLine.location == NSNotFound {
-            if headerData.hasSuffix(CR, LF, CR) {
-                endOfHeader = headerData.length - 3
-            } else if headerData.hasSuffix(CR, LF) {
-                endOfHeader = headerData.length - 2
-            } else if headerData.hasSuffix(CR) {
-                endOfHeader = headerData.length - 1
-            } else {
-                endOfHeader = headerData.length
-            }
-        } else {
-            endOfHeader = emptyLine.location
+            headerData.append(bufferPtr, count: length)
+        if let emptyLine = headerData.range(of: emptyLineData, options: [], in: endOfHeader..<headerData.count) {
+            endOfHeader = emptyLine.lowerBound
             headerFinished = true
+        } else {
+            if headerData.hasSuffix(CR, LF, CR) {
+                endOfHeader = headerData.count - 3
+            } else if headerData.hasSuffix(CR, LF) {
+                endOfHeader = headerData.count - 2
+            } else if headerData.hasSuffix(CR) {
+                endOfHeader = headerData.count - 1
+            } else {
+                endOfHeader = headerData.count
+            }
         }
         if headerFinished {
-            let startOfBody = NSRange(endOfHeader+4 ..< headerData.length)
-            bodyData.appendData(headerData.subdataWithRange(startOfBody))
-            headerData.length = endOfHeader+4
+            let startOfBody: Range<Int> = endOfHeader+4 ..< headerData.count
+            bodyData.append(headerData.subdata(in: startOfBody))
+            headerData.count = endOfHeader+4
             tryProcessBody()
         }
     }
-    func appendBody(bufferPtr: UnsafePointer<UInt8>, length readLength: Int) {
-        NSLog(__FUNCTION__)
+    func appendBody(_ bufferPtr: UnsafePointer<UInt8>, length readLength: Int) {
+        NSLog(#function)
         let length = estimatedBodyLength
         
-        let len = (bodyData.length + readLength <= length) ? readLength : length - bodyData.length
-        bodyData.appendBytes(bufferPtr, length: len)
+        let len = (bodyData.count + readLength <= length) ? readLength : length - bodyData.count
+        bodyData.append(bufferPtr, count: len)
         tryProcessBody()
     }
     
     func tryProcessHeader() {
-        NSLog(__FUNCTION__)
+        NSLog(#function)
         if headerFinished && !headerProcessingStarted {
             processHeader()
         }
@@ -169,10 +168,10 @@ class HTTPStreamReceiver: NSObject, NSStreamDelegate {
     }
     
     func processHeader() {
-        NSLog(__FUNCTION__)
+        NSLog(#function)
         headerProcessingStarted = true
-        print(headerData.length)
-        let requestHeader = NSString(data: headerData, encoding: NSISOLatin1StringEncoding)! as String
+        print(headerData.count)
+        let requestHeader = NSString(data: headerData as Data, encoding: String.Encoding.isoLatin1.rawValue)! as String
         parseRequestHeader(requestHeader)
         print("headers:\r\n\(headers)")
         headerProcessed = true
@@ -185,8 +184,8 @@ class HTTPStreamReceiver: NSObject, NSStreamDelegate {
     }
     
     func tryProcessBody() {
-        NSLog(__FUNCTION__)
-        if bodyData.length >= estimatedBodyLength {
+        NSLog(#function)
+        if bodyData.count >= estimatedBodyLength {
             bodyFinished = true
         }
         if headerFinished && bodyFinished && !bodyProcessingStarted {
@@ -196,34 +195,34 @@ class HTTPStreamReceiver: NSObject, NSStreamDelegate {
     }
     
     func processBody() {
-        NSLog(__FUNCTION__)
+        NSLog(#function)
         delegate?.receiverWillProcessBody?(self)
         bodyProcessingStarted = true
-        print(bodyData.length)
+        print(bodyData.count)
         //TODO:
         bodyProcessed = true
         delegate?.receiverDidProcessBody?(self)
     }
     
-    func parseRequestHeader(requestHeader: String) {
-        NSLog(__FUNCTION__)
+    func parseRequestHeader(_ requestHeader: String) {
+        NSLog(#function)
         var lineNumber = 0
-        let spaces = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+        let spaces = CharacterSet.whitespacesAndNewlines
         requestHeader.enumerateLines {line, stop in
             if lineNumber == 0 {
-                let methods = line.componentsSeparatedByCharactersInSet(spaces)
+                let methods = line.components(separatedBy: spaces)
                 self.method = methods[opt: 0]
                 self.path = methods[opt: 1]
                 self.httpVersion = methods[opt: 2]
                 NSLog("methods=%@", methods)
             } else {
-                if let index = line.rangeOfString(":") {
-                    let name = line.substringToIndex(index.startIndex)
-                    let value = line.substringFromIndex(index.endIndex).stringByTrimmingCharactersInSet(spaces)
+                if let index = line.range(of: ":") {
+                    let name = line.substring(to: index.lowerBound)
+                    let value = line.substring(from: index.upperBound).trimmingCharacters(in: spaces)
                     self.headers.append(value, forName: name)
                 }
             }
-            ++lineNumber
+            lineNumber += 1
         }
     }
 }

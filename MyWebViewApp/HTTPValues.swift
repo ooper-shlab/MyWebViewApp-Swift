@@ -10,27 +10,27 @@ import Foundation
 
 public typealias HTTPValueItem = (name: String, value: String?)
 
-public class HTTPValues: CustomStringConvertible, SequenceType,DictionaryLiteralConvertible {
-    public typealias Generator = Array<HTTPValueItem>.Generator
+open class HTTPValues: CustomStringConvertible, Sequence,ExpressibleByDictionaryLiteral {
+    public typealias Iterator = Array<HTTPValueItem>.Iterator
     let caseInsensitive: Bool
-    private var scalarMapping: [String: String?] = [:]
-    private var arrayMapping: [String: [String?]] = [:]
-    private var items: [HTTPValueItem] = []
+    fileprivate var scalarMapping: [String: String?] = [:]
+    fileprivate var arrayMapping: [String: [String?]] = [:]
+    fileprivate var items: [HTTPValueItem] = []
     
     convenience init(query: String) {
         self.init(caseInsensitive: false)
-        for q in query.isEmpty ? [] : query.componentsSeparatedByString("&") {
+        for q in query.isEmpty ? [] : query.components(separatedBy: "&") {
             var name: String
             var value: String?
-            if let equalPos = q.rangeOfString("=") {
-                name = q.substringToIndex(equalPos.startIndex)
-                value = q.substringFromIndex(equalPos.endIndex)
+            if let equalPos = q.range(of: "=") {
+                name = q.substring(to: equalPos.lowerBound)
+                value = q.substring(from: equalPos.upperBound)
             } else {
                 name = q
                 value = nil
             }
-            self.append(value?.stringByRemovingPercentEncoding,
-                forName: name.stringByRemovingPercentEncoding!)
+            self.append(value?.removingPercentEncoding,
+                forName: name.removingPercentEncoding!)
         }
     }
     init(caseInsensitive: Bool) {
@@ -40,13 +40,14 @@ public class HTTPValues: CustomStringConvertible, SequenceType,DictionaryLiteral
         self.init(caseInsensitive: false)
     }
     
-    public func append(item: HTTPValueItem) {
+    open func append(_ item: HTTPValueItem) {
         self.append(item.value, forName: item.name)
     }
     
-    public func append(value: String?, var forName name: String) {
+    public func append(_ value: String?, forName name: String) {
+        var name = name
         items.append((name: name, value: value))
-        if caseInsensitive {name = name.lowercaseString}
+        if caseInsensitive {name = name.lowercased()}
         scalarMapping[name] = value
         if arrayMapping[name] == nil {
             arrayMapping[name] = [value]
@@ -55,30 +56,35 @@ public class HTTPValues: CustomStringConvertible, SequenceType,DictionaryLiteral
         }
     }
     
-    public func remove(var name: String) {
+    public func remove(_ name: String) {
+        var name = name
         removeItemsForName(name)
-        if caseInsensitive {name = name.lowercaseString}
-        scalarMapping.removeValueForKey(name)
-        arrayMapping.removeValueForKey(name)
+        if caseInsensitive {name = name.lowercased()}
+        scalarMapping.removeValue(forKey: name)
+        arrayMapping.removeValue(forKey: name)
     }
     
-    public subscript(var name: String) -> String? {
+    open subscript(name: String) -> String? {
         get {
-            if caseInsensitive {name = name.lowercaseString}
+            var name = name
+            if caseInsensitive {name = name.lowercased()}
             return scalarMapping[name] ?? nil
         }
         set {
+            let name = name
             remove(name)
             self.append(newValue, forName: name)
         }
     }
     
-    public subscript(var all name: String) -> [String?] {
+    open subscript(all name: String) -> [String?] {
         get {
-            if caseInsensitive {name = name.lowercaseString}
+            var name = name
+            if caseInsensitive {name = name.lowercased()}
             return arrayMapping[name] ?? []
         }
         set {
+            let name = name
             remove(name)
             for value in newValue {
                 self.append(value, forName: name)
@@ -86,15 +92,15 @@ public class HTTPValues: CustomStringConvertible, SequenceType,DictionaryLiteral
         }
     }
     
-    private func removeItemsForName(name: String) {
+    fileprivate func removeItemsForName(_ name: String) {
         if caseInsensitive {
-            items = items.filter{$0.name.lowercaseString != name.lowercaseString}
+            items = items.filter{$0.name.lowercased() != name.lowercased()}
         } else {
             items = items.filter{$0.name != name}
         }
     }
     
-    public var description: String {
+    open var description: String {
         var result: String = ""
         for item in items {
             result += "\(item.name): \(item.value ?? String())\r\n"
@@ -102,8 +108,8 @@ public class HTTPValues: CustomStringConvertible, SequenceType,DictionaryLiteral
         return result
     }
     
-    public func generate() -> Generator {
-        return items.generate()
+    open func makeIterator() -> Iterator {
+        return items.makeIterator()
     }
     
     public required init(dictionaryLiteral elements: (String, String?)...) {

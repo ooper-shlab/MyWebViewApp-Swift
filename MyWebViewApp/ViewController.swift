@@ -23,28 +23,28 @@ class ViewController: UIViewController, WebClientDelegate, UIWebViewDelegate {
         webClient.searchForBrowsableDomains()
     }
     
-    func webClient(client: WebClient, didFindDomain domain: String) {
-        NSLog(__FUNCTION__)
+    func webClient(_ client: WebClient, didFindDomain domain: String) {
+        NSLog(#function)
         if domain == kWebServiceDomain {
             webClient.searchForServicesOfType(kWebServiceType, inDomain: domain, withName: kWebServiceName)
         }
     }
     
-    func webClient(client: WebClient, didFindService service: NSNetService) {
-        NSLog(__FUNCTION__)
+    func webClient(_ client: WebClient, didFindService service: NetService) {
+        NSLog(#function)
         webClient.resolve(service)
     }
     
-    func webClient(client: WebClient, didResolveService service: NSNetService) {
+    func webClient(_ client: WebClient, didResolveService service: NetService) {
         let hostName = service.hostName!
         let port = service.port
         let urlString = "http://\(hostName):\(port)/aaa/bbb/ccc"
-        let url = NSURL(string: urlString)!
-        let request = NSURLRequest(URL: url)
+        let url = URL(string: urlString)!
+        let request = URLRequest(url: url)
         webView.loadRequest(request)
     }
     
-    func webClient(client: WebClient, didNotResolveWithError error: NSError) {
+    func webClient(_ client: WebClient, didNotResolveWithError error: NSError) {
         //
     }
 

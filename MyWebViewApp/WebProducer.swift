@@ -10,30 +10,30 @@ import Foundation
 
 let ACTER_PREFIX = "__$"
 class WebProducer {
-    private(set) static var _producer: WebProducer = WebProducer()
+    fileprivate(set) static var _producer: WebProducer = WebProducer()
     class var currentProducer: WebProducer {
         return _producer
     }
     
-    func respondToRequest(request: WebServerRequest) {
+    func respondToRequest(_ request: WebServerRequest) {
         let receiver = request.receiver
         let requestPath = receiver.path!
-        let requestPathURL = NSURL(string: requestPath)!
+        let requestPathURL = URL(string: requestPath)!
         if acterResponds(request) {
             return
         }
-        let path = requestPathURL.path!
-        let resourceURL = NSBundle.mainBundle().resourceURL!
-        let documentURL = resourceURL.URLByAppendingPathComponent(path)
-        var foundURL: NSURL? = nil
-        let fileManager = NSFileManager.defaultManager()
+        let path = requestPathURL.path
+        let resourceURL = Bundle.main.resourceURL!
+        let documentURL = resourceURL.appendingPathComponent(path)
+        var foundURL: URL? = nil
+        let fileManager = FileManager.default
         var isDir: ObjCBool = false
-        if fileManager.fileExistsAtPath(documentURL.path!, isDirectory: &isDir) {
-            if isDir {
-                NSLog(documentURL.path!)
+        if fileManager.fileExists(atPath: documentURL.path, isDirectory: &isDir) {
+            if isDir.boolValue {
+                NSLog(documentURL.path)
                 for defPage in DEFAULTS {
-                    let url = documentURL.URLByAppendingPathComponent(defPage)
-                    if fileManager.fileExistsAtPath(url.path!) {
+                    let url = documentURL.appendingPathComponent(defPage)
+                    if fileManager.fileExists(atPath: url.path) {
                         foundURL = url
                         break
                     }
@@ -42,11 +42,11 @@ class WebProducer {
                 foundURL = documentURL
             }
         }
-        NSLog(documentURL.path!)
+        NSLog(documentURL.path)
         let transmitter = request.transmitter
         if let url = foundURL {
-            let data = NSData(contentsOfURL: url)!
-            let ext = url.pathExtension ?? ""
+            let data = try! Data(contentsOf: url)
+            let ext = url.pathExtension 
             if let contentType = TYPES[ext] {
                 transmitter.headers["Content-Type"] = contentType
             } else {
@@ -55,26 +55,26 @@ class WebProducer {
             transmitter.addResponse(data)
         } else {
             transmitter.headers["Content-Type"] = "text/html"
-            let responseHtml = "\(HTTPStatus.NotFound.fullDescription)<br>" +
+            let responseHtml = "\(HTTPStatus.notFound.fullDescription)<br>" +
             "Requested resource \(path.HTMLEntitiesEncoded) does not exist on this server."
             transmitter.addResponse(responseHtml)
         }
         transmitter.startTransmission()
     }
     
-    func acterResponds(request: WebServerRequest) -> Bool {
-        var pathComponents: [String] = NSURL(string: request.receiver.path!)!.pathComponents!
+    func acterResponds(_ request: WebServerRequest) -> Bool {
+        var pathComponents: [String] = URL(string: request.receiver.path!)!.pathComponents
         pathComponents.removeFirst() // remove first "/"
         guard pathComponents.count >= 2 else {return false}
         let method = pathComponents.popLast()! + ":"
         print(method)
-        let className = ACTER_PREFIX + pathComponents.joinWithSeparator("$")
+        let className = ACTER_PREFIX + pathComponents.joined(separator: "$")
         print(className)
         print(NSStringFromClass(bbb.self))
         if let classObj = NSClassFromString(className) as? NSObject.Type
-        where classObj.instancesRespondToSelector(Selector(method)) {
+        , classObj.instancesRespond(to: Selector(method)) {
             let actor = classObj.init()
-            actor.performSelector(Selector(method), withObject: request)
+            actor.perform(Selector(method), with: request)
             return true
         }
         return false

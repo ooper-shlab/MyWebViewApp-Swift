@@ -12,10 +12,10 @@ let WebClientErrorDomain = "WebClientErrorDomain"
 let kWebClientDidNotResolve = 1
 
 @objc protocol WebClientDelegate {
-    optional func webClient(client: WebClient, didFindDomain domain: String)
-    optional func webClient(client: WebClient, didFindService service: NSNetService)
-    optional func webClient(client: WebClient, didResolveService service: NSNetService)
-    optional func webClient(client: WebClient, didNotResolveWithError error: NSError)
+    @objc optional func webClient(_ client: WebClient, didFindDomain domain: String)
+    @objc optional func webClient(_ client: WebClient, didFindService service: NetService)
+    @objc optional func webClient(_ client: WebClient, didResolveService service: NetService)
+    @objc optional func webClient(_ client: WebClient, didNotResolveWithError error: NSError)
 }
 
 extension UInt8 {
@@ -24,22 +24,22 @@ extension UInt8 {
     }
 }
 
-class WebClient: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate {
+class WebClient: NSObject, NetServiceBrowserDelegate, NetServiceDelegate {
     weak var delegate: WebClientDelegate?
     
-    private var netServiceBrowser: NSNetServiceBrowser? {
+    fileprivate var netServiceBrowser: NetServiceBrowser? {
         willSet(newBrowser) {
             willSetNetServiceBrowser(newBrowser)
         }
     }
-    private var currentResolve: NSNetService?
+    fileprivate var currentResolve: NetService?
     
-    private func willSetNetServiceBrowser(newBrowser: NSNetServiceBrowser?) {
+    fileprivate func willSetNetServiceBrowser(_ newBrowser: NetServiceBrowser?) {
         netServiceBrowser?.stop()
     }
     
-    private func commonSetup() -> Bool {
-        self.netServiceBrowser = NSNetServiceBrowser()
+    fileprivate func commonSetup() -> Bool {
+        self.netServiceBrowser = NetServiceBrowser()
         if self.netServiceBrowser == nil {
             return false
         }
@@ -48,65 +48,65 @@ class WebClient: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate {
         return true
     }
 
-    func searchForBrowsableDomains() -> Bool {
-        NSLog(__FUNCTION__)
+    @discardableResult func searchForBrowsableDomains() -> Bool {
+        NSLog(#function)
         if !self.commonSetup() {return false}
         self.netServiceBrowser!.searchForBrowsableDomains()
         return true
     }
     
-    func netServiceBrowser(aNetServiceBrowser: NSNetServiceBrowser, didRemoveDomain domain: String, moreComing: Bool) {
-        NSLog(__FUNCTION__)
+    func netServiceBrowser(_ aNetServiceBrowser: NetServiceBrowser, didRemoveDomain domain: String, moreComing: Bool) {
+        NSLog(#function)
     }
     
-    func netServiceBrowser(aNetServiceBrowser: NSNetServiceBrowser, didFindDomain domain: String, moreComing: Bool) {
-        NSLog(__FUNCTION__)
+    func netServiceBrowser(_ aNetServiceBrowser: NetServiceBrowser, didFindDomain domain: String, moreComing: Bool) {
+        NSLog(#function)
         if domain == kWebServiceDomain {
             self.delegate?.webClient?(self, didFindDomain: domain)
         }
     }
     
     func searchForRegistrationDomains() -> Bool {
-        NSLog(__FUNCTION__)
+        NSLog(#function)
         if !self.commonSetup() {return false}
         self.netServiceBrowser!.searchForRegistrationDomains()
         return true
     }
     
-    private var searchingName: String?
-    func searchForServicesOfType(type: String, inDomain domain: String, withName name: String) -> Bool {
-        NSLog(__FUNCTION__)
+    fileprivate var searchingName: String?
+    @discardableResult func searchForServicesOfType(_ type: String, inDomain domain: String, withName name: String) -> Bool {
+        NSLog(#function)
         
         self.stopCurrentResolve()
         self.netServiceBrowser?.stop()
         
-        let aNetServiceBrowser = NSNetServiceBrowser()
+        let aNetServiceBrowser = NetServiceBrowser()
         
         aNetServiceBrowser.delegate = self
         self.netServiceBrowser = aNetServiceBrowser
         self.searchingName = name
-        self.netServiceBrowser!.searchForServicesOfType(type, inDomain: domain)
+        self.netServiceBrowser!.searchForServices(ofType: type, inDomain: domain)
         
         return true
     }
     
-    func netServiceBrowser(aNetServiceBrowser: NSNetServiceBrowser, didRemoveService service: NSNetService, moreComing: Bool) {
-        NSLog(__FUNCTION__)
+    func netServiceBrowser(_ aNetServiceBrowser: NetServiceBrowser, didRemove service: NetService, moreComing: Bool) {
+        NSLog(#function)
         if self.currentResolve != nil && service == self.currentResolve! {
             self.stopCurrentResolve()
         }
     }
     
-    func netServiceBrowser(aNetServiceBrowser: NSNetServiceBrowser, didFindService service: NSNetService, moreComing: Bool) {
-        NSLog(__FUNCTION__)
+    func netServiceBrowser(_ aNetServiceBrowser: NetServiceBrowser, didFind service: NetService, moreComing: Bool) {
+        NSLog(#function)
         if service.name == searchingName {
             self.stopCurrentResolve()
             self.delegate?.webClient?(self, didFindService: service)
         }
     }
     
-    func resolve(service: NSNetService) {
-        NSLog(__FUNCTION__)
+    func resolve(_ service: NetService) {
+        NSLog(#function)
         if self.currentResolve != nil {
             self.stopCurrentResolve()
         }
@@ -114,18 +114,18 @@ class WebClient: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate {
         self.currentResolve = service
         self.currentResolve!.delegate = self
         
-        self.currentResolve!.resolveWithTimeout(0.0)
+        self.currentResolve!.resolve(withTimeout: 0.0)
     }
     
-    func netService(sender: NSNetService, didNotResolve errorDict: [String : NSNumber]) {
-        NSLog(__FUNCTION__)
+    func netService(_ sender: NetService, didNotResolve errorDict: [String : NSNumber]) {
+        NSLog(#function)
         self.stopCurrentResolve()
         let error = NSError(domain: WebClientErrorDomain, code: kWebClientDidNotResolve, userInfo: errorDict)
         self.delegate?.webClient?(self, didNotResolveWithError: error)
     }
     
-    func netServiceDidResolveAddress(service: NSNetService) {
-        NSLog(__FUNCTION__)
+    func netServiceDidResolveAddress(_ service: NetService) {
+        NSLog(#function)
         assert(service === self.currentResolve)
         
         self.stopCurrentResolve()
@@ -133,7 +133,7 @@ class WebClient: NSObject, NSNetServiceBrowserDelegate, NSNetServiceDelegate {
         self.delegate?.webClient?(self, didResolveService: service)
     }
     
-    private func stopCurrentResolve() {
+    fileprivate func stopCurrentResolve() {
         self.currentResolve?.stop()
         self.currentResolve = nil
     }

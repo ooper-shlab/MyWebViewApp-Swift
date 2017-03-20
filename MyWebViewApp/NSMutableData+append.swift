@@ -9,8 +9,8 @@
 import Foundation
 
 extension NSMutableData {
-    func append(string: String) {
+    func append(_ string: String) {
         let len = string.utf8.count
-        self.appendBytes(string, length: len)
+        self.append(string, length: len)
     }
 }

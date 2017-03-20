@@ -9,185 +9,185 @@
 import Foundation
 
 enum HTTPStatus: Int {
-    case Continue = 100
-    case SwitchingProtocols
-    case Processing
+    case `continue` = 100
+    case switchingProtocols
+    case processing
     
-    case OK = 200
-    case Created
-    case Accepted
-    case NonAuthoritativeInformation
-    case NoContent
-    case ResetContent
-    case PartialContent
-    case MultiStatus
-    case IMUsed
+    case ok = 200
+    case created
+    case accepted
+    case nonAuthoritativeInformation
+    case noContent
+    case resetContent
+    case partialContent
+    case multiStatus
+    case imUsed
     
-    case MultipleChoices = 300
-    case MovedPermanently
-    case Found
-    case SeeOther
-    case NotModified
-    case UseProxy
+    case multipleChoices = 300
+    case movedPermanently
+    case found
+    case seeOther
+    case notModified
+    case useProxy
     case __Unused__306
-    case TemporaryRedirect
-    case PermanentRedirect
+    case temporaryRedirect
+    case permanentRedirect
     
-    case BadRequest = 400
-    case Unauthorized
-    case PaymentRequired
-    case Forbidden
-    case NotFound
-    case MethodNotAllowed
-    case NotAcceptable
-    case ProxyAuthenticationRequired
-    case RequestTimeout
-    case Conflict
-    case Gone
-    case LengthRequired
-    case PreconditionFailed
-    case RequestEntityTooLarge
-    case RequestURITooLong
-    case UnsupportedMediaType
-    case RequestedRangeNotSatisfiable
-    case ExpectationFailed
-    case ImATeapot
+    case badRequest = 400
+    case unauthorized
+    case paymentRequired
+    case forbidden
+    case notFound
+    case methodNotAllowed
+    case notAcceptable
+    case proxyAuthenticationRequired
+    case requestTimeout
+    case conflict
+    case gone
+    case lengthRequired
+    case preconditionFailed
+    case requestEntityTooLarge
+    case requestURITooLong
+    case unsupportedMediaType
+    case requestedRangeNotSatisfiable
+    case expectationFailed
+    case imATeapot
     
-    case UnprocessableEntity = 422
-    case Locked
-    case FailedDependency
+    case unprocessableEntity = 422
+    case locked
+    case failedDependency
 
-    case UpgradeRequired = 426
+    case upgradeRequired = 426
     
-    case InternalServerError = 500
-    case NotImplemented
-    case BadGateway
-    case ServiceUnavailable
-    case GatewayTimeout
-    case HTTPVersionNotSupported
-    case VariantAlsoNegotiates
-    case InsufficientStorage
-    case BandwidthLimitExceeded
-    case NotExtended
+    case internalServerError = 500
+    case notImplemented
+    case badGateway
+    case serviceUnavailable
+    case gatewayTimeout
+    case httpVersionNotSupported
+    case variantAlsoNegotiates
+    case insufficientStorage
+    case bandwidthLimitExceeded
+    case notExtended
 }
 
 extension HTTPStatus: CustomStringConvertible {
     var description: String {
         switch self {
             //1xx
-        case Continue:
+        case .continue:
             return "Continue"
-        case SwitchingProtocols:
+        case .switchingProtocols:
             return "Switching Protocols"
-        case Processing:
+        case .processing:
             return "Processing"
             //2xx
-        case OK:
+        case .ok:
             return "OK"
-        case Created:
+        case .created:
             return "Created"
-        case Accepted:
+        case .accepted:
             return "Accepted"
-        case NonAuthoritativeInformation:
+        case .nonAuthoritativeInformation:
             return "Non-Authoritative Information"
-        case NoContent:
+        case .noContent:
             return "No Content"
-        case ResetContent:
+        case .resetContent:
             return "Reset Content"
-        case PartialContent:
+        case .partialContent:
             return "Partial Content"
-        case MultiStatus:
+        case .multiStatus:
             return "Multi-Status"
-        case IMUsed:
+        case .imUsed:
             return "IM Used"
             //3xx
-        case MultipleChoices:
+        case .multipleChoices:
             return "Multiple Choices"
-        case MovedPermanently:
+        case .movedPermanently:
             return "Moved Permanently"
-        case Found:
+        case .found:
             return "Found"
-        case SeeOther:
+        case .seeOther:
             return "See Other"
-        case NotModified:
+        case .notModified:
             return "Not Modified"
-        case UseProxy:
+        case .useProxy:
             return "Use Proxy"
 //        case __Unused__306
 //            return ""
-        case TemporaryRedirect:
+        case .temporaryRedirect:
             return "Temporary Redirect"
-        case PermanentRedirect:
+        case .permanentRedirect:
             return "Permanent Redirect"
             //4xx
-        case BadRequest:
+        case .badRequest:
             return "Bad Request"
-        case Unauthorized:
+        case .unauthorized:
             return "Unauthorized"
-        case PaymentRequired:
+        case .paymentRequired:
             return "Payment Required"
-        case Forbidden:
+        case .forbidden:
             return "Forbidden"
-        case NotFound:
+        case .notFound:
             return "Not Found"
-        case MethodNotAllowed:
+        case .methodNotAllowed:
             return "Method Not Allowed"
-        case NotAcceptable:
+        case .notAcceptable:
             return "Not Acceptable"
-        case ProxyAuthenticationRequired:
+        case .proxyAuthenticationRequired:
             return "Proxy Authentication Required"
-        case RequestTimeout:
+        case .requestTimeout:
             return "Request Timeout"
-        case Conflict:
+        case .conflict:
             return "Conflict"
-        case Gone:
+        case .gone:
             return "Gone"
-        case LengthRequired:
+        case .lengthRequired:
             return "Length Required"
-        case PreconditionFailed:
+        case .preconditionFailed:
             return "Precondition Failed"
-        case RequestEntityTooLarge:
+        case .requestEntityTooLarge:
             return "Request Entity Too Large"
-        case RequestURITooLong:
+        case .requestURITooLong:
             return "Request-URI Too Long"
-        case UnsupportedMediaType:
+        case .unsupportedMediaType:
             return "Unsupported Media Type"
-        case RequestedRangeNotSatisfiable:
+        case .requestedRangeNotSatisfiable:
             return "Requested Range Not Satisfiable"
-        case ExpectationFailed:
+        case .expectationFailed:
             return "Expectation Failed"
-        case ImATeapot:
+        case .imATeapot:
             return "I'm a teapot"
             
-        case UnprocessableEntity:
+        case .unprocessableEntity:
             return "Unprocessable Entity"
-        case Locked:
+        case .locked:
             return "Locked"
-        case FailedDependency:
+        case .failedDependency:
             return "Failed Dependency"
             
-        case UpgradeRequired:
+        case .upgradeRequired:
             return "Upgrade Required"
             //5xx
-        case InternalServerError:
+        case .internalServerError:
             return "Internal Server Error"
-        case NotImplemented:
+        case .notImplemented:
             return "Not Implemented"
-        case BadGateway:
+        case .badGateway:
             return "Bad Gateway"
-        case ServiceUnavailable:
+        case .serviceUnavailable:
             return "Service Unavailable"
-        case GatewayTimeout:
+        case .gatewayTimeout:
             return "Gateway Timeout"
-        case HTTPVersionNotSupported:
+        case .httpVersionNotSupported:
             return "HTTP Version Not Supported"
-        case VariantAlsoNegotiates:
+        case .variantAlsoNegotiates:
             return "Variant Also Negotiates"
-        case InsufficientStorage:
+        case .insufficientStorage:
             return "Insufficient Storage"
-        case BandwidthLimitExceeded:
+        case .bandwidthLimitExceeded:
             return "Bandwidth Limit Exceeded"
-        case NotExtended:
+        case .notExtended:
             return "Not Extended"
             
         default:

@@ -10,7 +10,7 @@ import UIKit
 
 let kWebServiceType = "_http._tcp"
 let kWebServiceDomain = "local."
-let kWebServiceName = UIDevice.currentDevice().name
+let kWebServiceName = UIDevice.current.name
 
 let WebServerErrorDomain = "WebServerErrorDomain"
 let kWebServerCouldNotBindToIPv4Address = 1
@@ -21,9 +21,9 @@ let kWebServerCouldNotBindOrEstablishNetService = 4
 let kWebServerDidNotPublish = 5
 
 @objc
-class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
+class WebServer: NSObject, WebServerRequestDelegate, NetServiceDelegate {
     var connectionBag: Set<WebServerRequest> = []
-    var netService: NSNetService?
+    var netService: NetService?
 
     override init() {
         super.init()
@@ -34,23 +34,23 @@ class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
         }
     }
     
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         self.teardown()
     }
     
-    func netServiceDidPublish(sender: NSNetService) {
-        NSLog(__FUNCTION__)
+    func netServiceDidPublish(_ sender: NetService) {
+        NSLog(#function)
         self.netService = sender
     }
-    func netService(sender: NSNetService, didNotPublish errorDict: [String: NSNumber]) {
-        NSLog(__FUNCTION__)
+    func netService(_ sender: NetService, didNotPublish errorDict: [String: NSNumber]) {
+        NSLog(#function)
         fatalError(errorDict.description)
     }
     
-    func netService(sender: NSNetService, didAcceptConnectionWithInputStream readStream: NSInputStream, outputStream writeStream: NSOutputStream) {
-        NSOperationQueue.mainQueue().addOperationWithBlock {
-            CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue)
-            CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue)
+    func netService(_ sender: NetService, didAcceptConnectionWith readStream: InputStream, outputStream writeStream: OutputStream) {
+        OperationQueue.main.addOperation {
+            CFReadStreamSetProperty(readStream, CFStreamPropertyKey(kCFStreamPropertyShouldCloseNativeSocket) , kCFBooleanTrue)
+            CFWriteStreamSetProperty(writeStream, CFStreamPropertyKey(kCFStreamPropertyShouldCloseNativeSocket), kCFBooleanTrue)
             self.handleConnection(inputStream: readStream, outputStream: writeStream)
         }
     }
@@ -63,7 +63,7 @@ class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
         } else {
             
             if self.netService == nil {
-                self.netService = NSNetService(domain: kWebServiceDomain, type: kWebServiceType, name: kWebServiceName, port: 0)
+                self.netService = NetService(domain: kWebServiceDomain, type: kWebServiceType, name: kWebServiceName, port: 0)
                 self.netService?.delegate = self
             }
             
@@ -81,11 +81,11 @@ class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
             fatalError(thisError.localizedDescription)
         }
         
-        self.netService!.publishWithOptions(.ListenForConnections)
+        self.netService!.publish(options: .listenForConnections)
     }
     
-    func handleConnection(inputStream readStream: NSInputStream, outputStream writeStream: NSOutputStream) {
-        NSLog(__FUNCTION__)
+    func handleConnection(inputStream readStream: InputStream, outputStream writeStream: OutputStream) {
+        NSLog(#function)
         
         let newPeer = WebServerRequest(inputStream: readStream,
             outputStream: writeStream,
@@ -95,18 +95,18 @@ class WebServer: NSObject, WebServerRequestDelegate, NSNetServiceDelegate {
             
     }
     
-    func webServerRequestDidProcessBody(request: WebServerRequest) {
-        NSLog(__FUNCTION__)
+    func webServerRequestDidProcessBody(_ request: WebServerRequest) {
+        NSLog(#function)
         let producer = WebProducer.currentProducer
         producer.respondToRequest(request)
     }
     
-    func webServerRequestDidFinish(request: WebServerRequest) {
-        NSLog(__FUNCTION__)
+    func webServerRequestDidFinish(_ request: WebServerRequest) {
+        NSLog(#function)
         self.connectionBag.remove(request)
     }
     
-    func webServerRequest(request: WebServerRequest, didReceiveError error: NSError) {
+    func webServerRequest(_ request: WebServerRequest, didReceiveError error: NSError) {
         NSLog(error.description)
         self.connectionBag.remove(request)
     }

@@ -10,44 +10,44 @@ import Foundation
 
 class ResponseProvider {
     var length: Int {
-        fatalError("ResponseProvider is an abstract class: implement \(__FUNCTION__) in the subclass.")
+        fatalError("ResponseProvider is an abstract class: implement \(#function) in the subclass.")
     }
     var availableBytes: Int {
-        fatalError("ResponseProvider is an abstract class: implement \(__FUNCTION__) in the subclass.")
+        fatalError("ResponseProvider is an abstract class: implement \(#function) in the subclass.")
     }
     var finished: Bool {
-        fatalError("ResponseProvider is an abstract class: implement \(__FUNCTION__) in the subclass.")
+        fatalError("ResponseProvider is an abstract class: implement \(#function) in the subclass.")
     }
-    func sendResponse(ostream: NSOutputStream, length: Int) -> Int {
-        fatalError("ResponseProvider is an abstract class: implement \(__FUNCTION__) in the subclass.")
+    func sendResponse(_ ostream: OutputStream, length: Int) -> Int {
+        fatalError("ResponseProvider is an abstract class: implement \(#function) in the subclass.")
     }
-    func sendResponse(ostream: NSOutputStream) -> Int {
+    @discardableResult func sendResponse(_ ostream: OutputStream) -> Int {
         return sendResponse(ostream, length: self.availableBytes)
     }
 }
 
 class DataResponseProvider: ResponseProvider {
-    private var data: NSData
-    private var offset: Int
-    init(data: NSData) {
+    fileprivate var data: Data
+    fileprivate var offset: Int
+    init(data: Data) {
         self.data = data
         self.offset = 0
     }
     init(string: String) {
-        self.data = (string as NSString).dataUsingEncoding(NSUTF8StringEncoding)!
+        self.data = (string as NSString).data(using: String.Encoding.utf8.rawValue)!
         self.offset = 0
     }
     override var length: Int {
-        return data.length
+        return data.count
     }
     override var availableBytes: Int {
-        return data.length - offset
+        return data.count - offset
     }
     override var finished: Bool {
-        return offset >= data.length
+        return offset >= data.count
     }
-    override func sendResponse(ostream: NSOutputStream, length: Int) -> Int {
-        let lenSent = ostream.write(UnsafePointer(data.bytes) + offset, maxLength: length)
+    override func sendResponse(_ ostream: OutputStream, length: Int) -> Int {
+        let lenSent = ostream.write((data as NSData).bytes.bindMemory(to: UInt8.self, capacity: data.count) + offset, maxLength: length)
         offset += lenSent
         return lenSent
     }
@@ -64,38 +64,38 @@ class DataResponseProvider: ResponseProvider {
 //}
 
 @objc protocol HTTPStreamTransmitterDelegate {
-    optional func transmitterDidFinishTransmission(transmitter: HTTPStreamTransmitter)
-    optional func transmitter(transmitter: HTTPStreamTransmitter, errorDidOccur error: NSError)
+    @objc optional func transmitterDidFinishTransmission(_ transmitter: HTTPStreamTransmitter)
+    @objc optional func transmitter(_ transmitter: HTTPStreamTransmitter, errorDidOccur error: NSError)
 }
 
 let kHTTPStreamTransmitterErrorDomain = "kHTTPStreamTransmitterErrorDomain"
 let kHTTPStreamTransmitterUnknownError = 1
 
-class HTTPStreamTransmitter: NSObject, NSStreamDelegate {
-    private let ostream: NSOutputStream
+class HTTPStreamTransmitter: NSObject, StreamDelegate {
+    fileprivate let ostream: OutputStream
     
     weak var delegate: HTTPStreamTransmitterDelegate?
     var transmissionStarted: Bool = false
     var transmissionDidFinishNotified = false
     var headers: HTTPValues = HTTPValues(caseInsensitive: true)
     
-    private var responses: [ResponseProvider] = []
+    fileprivate var responses: [ResponseProvider] = []
     
-    private var headerGenerated: Bool = false
-    var status: HTTPStatus = .OK
+    fileprivate var headerGenerated: Bool = false
+    var status: HTTPStatus = .ok
     var httpVersion: String = "HTTP/1.1"
     
-    init(ostream: NSOutputStream) {
+    init(ostream: OutputStream) {
         self.ostream = ostream
         super.init()
         self.ostream.delegate = self
     }
     func run() {
-        self.ostream.scheduleInRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+        self.ostream.schedule(in: RunLoop.current, forMode: RunLoopMode.commonModes)
         self.ostream.open()
     }
     deinit {
-        self.ostream.removeFromRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+        self.ostream.remove(from: RunLoop.current, forMode: RunLoopMode.commonModes)
         self.ostream.close()
     }
     
@@ -105,28 +105,28 @@ class HTTPStreamTransmitter: NSObject, NSStreamDelegate {
         self.startTransmission()
     }
 
-    @nonobjc func addResponse(string: String) {
+    @nonobjc func addResponse(_ string: String) {
         let response = DataResponseProvider(string: string)
         self.addResponse(response)
     }
-    @nonobjc func addResponse(data: NSData) {
+    @nonobjc func addResponse(_ data: Data) {
         let response = DataResponseProvider(data: data)
         self.addResponse(response)
     }
     
-    @nonobjc func addResponse(response: ResponseProvider) {
+    @nonobjc func addResponse(_ response: ResponseProvider) {
         self.responses.append(response)
     }
     
     func startTransmission() {
-        NSLog(__FUNCTION__)
+        NSLog(#function)
         self.addHeaderResponse()
         self.transmissionStarted = true
         self.transmit()
     }
     
     func addHeaderResponse() {
-        NSLog(__FUNCTION__)
+        NSLog(#function)
         let data = NSMutableData()
         let statusLine = "\(httpVersion) \(status.fullDescription)\r\n"
         data.append(statusLine)
@@ -145,32 +145,32 @@ class HTTPStreamTransmitter: NSObject, NSStreamDelegate {
             }
         }
         data.append("\r\n")
-        let response = DataResponseProvider(data: data)
-        responses.insert(response, atIndex: 0)
+        let response = DataResponseProvider(data: data as Data)
+        responses.insert(response, at: 0)
     }
     
-    func stream(aStream: NSStream, handleEvent eventCode: NSStreamEvent) {
-        NSLog(__FUNCTION__)
+    func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
+        NSLog(#function)
         switch eventCode {
-        case NSStreamEvent.HasSpaceAvailable:
+        case Stream.Event.hasSpaceAvailable:
             if aStream === self.ostream {
                 transmit()
             }
-        case NSStreamEvent.EndEncountered:
+        case Stream.Event.endEncountered:
             if aStream === self.ostream {
                 NSLog("Output stream closed unexpectedly")
             }
-        case NSStreamEvent.ErrorOccurred:
+        case Stream.Event.errorOccurred:
             let error = aStream.streamError ?? NSError(domain: kHTTPStreamTransmitterErrorDomain, code: kHTTPStreamTransmitterUnknownError, userInfo: nil)
-            NSLog("Error:\(error.description) in output stream")
-            delegate?.transmitter?(self, errorDidOccur: error)
+            NSLog("Error:\(error) in output stream")
+            delegate?.transmitter?(self, errorDidOccur: error as NSError)
         default:
             break
         }
     }
     
     func transmit() {
-        NSLog(__FUNCTION__)
+        NSLog(#function)
         if transmissionStarted {
             while !responses.isEmpty && ostream.hasSpaceAvailable {
                 let response = responses.first!
