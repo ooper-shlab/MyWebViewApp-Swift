@@ -10,7 +10,7 @@ import Foundation
 
 let ACTER_PREFIX = "__$"
 class WebProducer {
-    fileprivate(set) static var _producer: WebProducer = WebProducer()
+    private(set) static var _producer: WebProducer = WebProducer()
     class var currentProducer: WebProducer {
         return _producer
     }

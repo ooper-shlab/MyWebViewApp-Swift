@@ -13,9 +13,9 @@ public typealias HTTPValueItem = (name: String, value: String?)
 open class HTTPValues: CustomStringConvertible, Sequence,ExpressibleByDictionaryLiteral {
     public typealias Iterator = Array<HTTPValueItem>.Iterator
     let caseInsensitive: Bool
-    fileprivate var scalarMapping: [String: String?] = [:]
-    fileprivate var arrayMapping: [String: [String?]] = [:]
-    fileprivate var items: [HTTPValueItem] = []
+    private var scalarMapping: [String: String?] = [:]
+    private var arrayMapping: [String: [String?]] = [:]
+    private var items: [HTTPValueItem] = []
     
     convenience init(query: String) {
         self.init(caseInsensitive: false)
@@ -92,7 +92,7 @@ open class HTTPValues: CustomStringConvertible, Sequence,ExpressibleByDictionary
         }
     }
     
-    fileprivate func removeItemsForName(_ name: String) {
+    private func removeItemsForName(_ name: String) {
         if caseInsensitive {
             items = items.filter{$0.name.lowercased() != name.lowercased()}
         } else {

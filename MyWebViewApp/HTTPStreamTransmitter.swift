@@ -27,14 +27,14 @@ class ResponseProvider {
 }
 
 class DataResponseProvider: ResponseProvider {
-    fileprivate var data: Data
-    fileprivate var offset: Int
+    private var data: Data
+    private var offset: Int
     init(data: Data) {
         self.data = data
         self.offset = 0
     }
     init(string: String) {
-        self.data = (string as NSString).data(using: String.Encoding.utf8.rawValue)!
+        self.data = string.data(using: .utf8)!
         self.offset = 0
     }
     override var length: Int {
@@ -47,7 +47,9 @@ class DataResponseProvider: ResponseProvider {
         return offset >= data.count
     }
     override func sendResponse(_ ostream: OutputStream, length: Int) -> Int {
-        let lenSent = ostream.write((data as NSData).bytes.bindMemory(to: UInt8.self, capacity: data.count) + offset, maxLength: length)
+        let lenSent = data.withUnsafeBytes {bytes in
+            ostream.write(bytes + offset, maxLength: length)
+        }
         offset += lenSent
         return lenSent
     }
@@ -65,23 +67,23 @@ class DataResponseProvider: ResponseProvider {
 
 @objc protocol HTTPStreamTransmitterDelegate {
     @objc optional func transmitterDidFinishTransmission(_ transmitter: HTTPStreamTransmitter)
-    @objc optional func transmitter(_ transmitter: HTTPStreamTransmitter, errorDidOccur error: NSError)
+    @objc optional func transmitter(_ transmitter: HTTPStreamTransmitter, errorDidOccur error: Error)
 }
 
 let kHTTPStreamTransmitterErrorDomain = "kHTTPStreamTransmitterErrorDomain"
 let kHTTPStreamTransmitterUnknownError = 1
 
 class HTTPStreamTransmitter: NSObject, StreamDelegate {
-    fileprivate let ostream: OutputStream
+    private let ostream: OutputStream
     
     weak var delegate: HTTPStreamTransmitterDelegate?
     var transmissionStarted: Bool = false
     var transmissionDidFinishNotified = false
     var headers: HTTPValues = HTTPValues(caseInsensitive: true)
     
-    fileprivate var responses: [ResponseProvider] = []
+    private var responses: [ResponseProvider] = []
     
-    fileprivate var headerGenerated: Bool = false
+    private var headerGenerated: Bool = false
     var status: HTTPStatus = .ok
     var httpVersion: String = "HTTP/1.1"
     
@@ -127,7 +129,7 @@ class HTTPStreamTransmitter: NSObject, StreamDelegate {
     
     func addHeaderResponse() {
         NSLog(#function)
-        let data = NSMutableData()
+        var data = Data()
         let statusLine = "\(httpVersion) \(status.fullDescription)\r\n"
         data.append(statusLine)
         if headers["Content-Length"] == nil {
@@ -145,7 +147,7 @@ class HTTPStreamTransmitter: NSObject, StreamDelegate {
             }
         }
         data.append("\r\n")
-        let response = DataResponseProvider(data: data as Data)
+        let response = DataResponseProvider(data: data)
         responses.insert(response, at: 0)
     }
     
@@ -163,7 +165,7 @@ class HTTPStreamTransmitter: NSObject, StreamDelegate {
         case Stream.Event.errorOccurred:
             let error = aStream.streamError ?? NSError(domain: kHTTPStreamTransmitterErrorDomain, code: kHTTPStreamTransmitterUnknownError, userInfo: nil)
             NSLog("Error:\(error) in output stream")
-            delegate?.transmitter?(self, errorDidOccur: error as NSError)
+            delegate?.transmitter?(self, errorDidOccur: error)
         default:
             break
         }

@@ -11,7 +11,7 @@ import UIKit
 protocol WebServerRequestDelegate {
     @objc optional func webServerRequestDidProcessBody(_ request: WebServerRequest)
     @objc optional func webServerRequestDidFinish(_ request: WebServerRequest)
-    @objc optional func webServerRequest(_ request: WebServerRequest, didReceiveError error: NSError)
+    @objc optional func webServerRequest(_ request: WebServerRequest, didReceiveError error: Error)
 }
 
 let WebServerRequestErrorDomain = "WebServerRequestErrorDomain"
@@ -52,7 +52,7 @@ class WebServerRequest: NSObject, HTTPStreamReceiverDelegate, HTTPStreamTransmit
         }
     }
     
-    func receiver(_ receiver: HTTPStreamReceiver, errorDidOccur error: NSError) {
+    func receiver(_ receiver: HTTPStreamReceiver, errorDidOccur error: Error) {
         NSLog(#function)
         DispatchQueue.main.async {
             self.delegate?.webServerRequest?(self, didReceiveError: error)
@@ -66,7 +66,7 @@ class WebServerRequest: NSObject, HTTPStreamReceiverDelegate, HTTPStreamTransmit
         }
     }
     
-    func transmitter(_ transmitter: HTTPStreamTransmitter, errorDidOccur error: NSError) {
+    func transmitter(_ transmitter: HTTPStreamTransmitter, errorDidOccur error: Error) {
         NSLog(#function)
         DispatchQueue.main.async {
             self.delegate?.webServerRequest?(self, didReceiveError: error)

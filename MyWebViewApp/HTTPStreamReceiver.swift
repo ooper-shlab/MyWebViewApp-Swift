@@ -11,7 +11,7 @@ import Foundation
 @objc protocol HTTPStreamReceiverDelegate {
     @objc optional func receiverWillProcessBody(_ receiver: HTTPStreamReceiver)
     @objc optional func receiverDidProcessBody(_ receiver: HTTPStreamReceiver)
-    @objc optional func receiver(_ receiver: HTTPStreamReceiver, errorDidOccur error: NSError)
+    @objc optional func receiver(_ receiver: HTTPStreamReceiver, errorDidOccur error: Error)
 }
 
 private let BUFFER_SIZE = 1024
@@ -26,15 +26,15 @@ class HTTPStreamReceiver: NSObject, StreamDelegate {
     weak var delegate: HTTPStreamReceiverDelegate?
     
     var headerData = Data(capacity: BUFFER_SIZE)
-    fileprivate(set) var headerFinished: Bool = false
+    private(set) var headerFinished: Bool = false
     var headerProcessingStarted: Bool = false
     var headerProcessed: Bool = false
-    fileprivate(set) var endOfHeader = 0
+    private(set) var endOfHeader = 0
     
     var bodyData = Data()
     var bodyProcessingStarted: Bool = false
     var bodyProcessed: Bool = false
-    fileprivate(set) var bodyFinished: Bool = false
+    private(set) var bodyFinished: Bool = false
     var estimatedBodyLength: Int = MAXIMUM_BODY_SIZE {
         didSet {
             tryProcessBody()
@@ -46,7 +46,7 @@ class HTTPStreamReceiver: NSObject, StreamDelegate {
     var path: String?
     var httpVersion: String?
     
-    fileprivate var _query: HTTPValues? = nil
+    private var _query: HTTPValues? = nil
     var query: HTTPValues {
         if _query != nil {
             if let
@@ -95,7 +95,7 @@ class HTTPStreamReceiver: NSObject, StreamDelegate {
         case Stream.Event.errorOccurred:
             let error = stream.streamError ?? NSError(domain: kHTTPStreamReceiverErrorDomain, code: kHTTPStreamReceiverUnknownError, userInfo: nil)
             NSLog("Error:\(error) in input stream")
-            delegate?.receiver?(self, errorDidOccur: error as NSError)
+            delegate?.receiver?(self, errorDidOccur: error)
         default:
             break
         }
@@ -171,7 +171,7 @@ class HTTPStreamReceiver: NSObject, StreamDelegate {
         NSLog(#function)
         headerProcessingStarted = true
         print(headerData.count)
-        let requestHeader = NSString(data: headerData as Data, encoding: String.Encoding.isoLatin1.rawValue)! as String
+        let requestHeader = String(data: headerData, encoding: .isoLatin1)!
         parseRequestHeader(requestHeader)
         print("headers:\r\n\(headers)")
         headerProcessed = true

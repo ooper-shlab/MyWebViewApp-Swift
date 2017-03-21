@@ -44,7 +44,7 @@ class ViewController: UIViewController, WebClientDelegate, UIWebViewDelegate {
         webView.loadRequest(request)
     }
     
-    func webClient(_ client: WebClient, didNotResolveWithError error: NSError) {
+    func webClient(_ client: WebClient, didNotResolveWithError error: Error) {
         //
     }
 

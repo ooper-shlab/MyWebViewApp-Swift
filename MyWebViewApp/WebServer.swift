@@ -29,7 +29,7 @@ class WebServer: NSObject, WebServerRequestDelegate, NetServiceDelegate {
         super.init()
         do {
             try self.setupServer()
-        } catch let thisError as NSError {
+        } catch let thisError {
             fatalError(thisError.localizedDescription)
         }
     }
@@ -77,7 +77,7 @@ class WebServer: NSObject, WebServerRequestDelegate, NetServiceDelegate {
     func run() {
         do {
             try self.setupServer()
-        } catch let thisError as NSError {
+        } catch let thisError {
             fatalError(thisError.localizedDescription)
         }
         
@@ -106,8 +106,8 @@ class WebServer: NSObject, WebServerRequestDelegate, NetServiceDelegate {
         self.connectionBag.remove(request)
     }
     
-    func webServerRequest(_ request: WebServerRequest, didReceiveError error: NSError) {
-        NSLog(error.description)
+    func webServerRequest(_ request: WebServerRequest, didReceiveError error: Error) {
+        NSLog(error.localizedDescription)
         self.connectionBag.remove(request)
     }
     

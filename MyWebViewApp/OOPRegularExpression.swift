@@ -21,7 +21,7 @@ class OOPRegularExpression: NSRegularExpression {
     typealias ReplacementBlock = (NSTextCheckingResult, String, Int, String)->String
     typealias SimpleReplacementBlock = (String, Int)->String
     
-    fileprivate var replacementBlock: ReplacementBlock
+    private var replacementBlock: ReplacementBlock
     
     init(pattern: String, options: NSRegularExpression.Options, block: @escaping ReplacementBlock) throws {
         self.replacementBlock = block

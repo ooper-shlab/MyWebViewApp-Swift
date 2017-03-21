@@ -8,9 +8,8 @@
 
 import Foundation
 
-extension NSMutableData {
-    func append(_ string: String) {
-        let len = string.utf8.count
-        self.append(string, length: len)
+extension Data {
+    mutating func append(_ string: String) {
+        self.append(string.data(using: .utf8)!)
     }
 }

@@ -15,7 +15,7 @@ let kWebClientDidNotResolve = 1
     @objc optional func webClient(_ client: WebClient, didFindDomain domain: String)
     @objc optional func webClient(_ client: WebClient, didFindService service: NetService)
     @objc optional func webClient(_ client: WebClient, didResolveService service: NetService)
-    @objc optional func webClient(_ client: WebClient, didNotResolveWithError error: NSError)
+    @objc optional func webClient(_ client: WebClient, didNotResolveWithError error: Error)
 }
 
 extension UInt8 {
@@ -27,18 +27,18 @@ extension UInt8 {
 class WebClient: NSObject, NetServiceBrowserDelegate, NetServiceDelegate {
     weak var delegate: WebClientDelegate?
     
-    fileprivate var netServiceBrowser: NetServiceBrowser? {
+    private var netServiceBrowser: NetServiceBrowser? {
         willSet(newBrowser) {
             willSetNetServiceBrowser(newBrowser)
         }
     }
-    fileprivate var currentResolve: NetService?
+    private var currentResolve: NetService?
     
-    fileprivate func willSetNetServiceBrowser(_ newBrowser: NetServiceBrowser?) {
+    private func willSetNetServiceBrowser(_ newBrowser: NetServiceBrowser?) {
         netServiceBrowser?.stop()
     }
     
-    fileprivate func commonSetup() -> Bool {
+    private func commonSetup() -> Bool {
         self.netServiceBrowser = NetServiceBrowser()
         if self.netServiceBrowser == nil {
             return false
@@ -73,7 +73,7 @@ class WebClient: NSObject, NetServiceBrowserDelegate, NetServiceDelegate {
         return true
     }
     
-    fileprivate var searchingName: String?
+    private var searchingName: String?
     @discardableResult func searchForServicesOfType(_ type: String, inDomain domain: String, withName name: String) -> Bool {
         NSLog(#function)
         
@@ -133,7 +133,7 @@ class WebClient: NSObject, NetServiceBrowserDelegate, NetServiceDelegate {
         self.delegate?.webClient?(self, didResolveService: service)
     }
     
-    fileprivate func stopCurrentResolve() {
+    private func stopCurrentResolve() {
         self.currentResolve?.stop()
         self.currentResolve = nil
     }
