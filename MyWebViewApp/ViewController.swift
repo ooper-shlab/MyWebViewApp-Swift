@@ -7,16 +7,24 @@
 //
 
 import UIKit
+import WebKit
 
-class ViewController: UIViewController, WebClientDelegate, UIWebViewDelegate {
-    @IBOutlet weak var webView: UIWebView!
+class ViewController: UIViewController, WebClientDelegate, WKUIDelegate, WKNavigationDelegate {
+    weak var webView: WKWebView!
     
     var webClient: WebClient!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        webView.delegate = self
+        var frame = self.view!.bounds
+        frame.origin.y += 20
+        frame.size.height -= 20
+        let webView = WKWebView(frame: frame)
+        webView.uiDelegate = self
+        webView.navigationDelegate = self
+        self.view!.addSubview(webView)
+        self.webView = webView
         
         webClient = WebClient()
         webClient.delegate = self
@@ -41,7 +49,7 @@ class ViewController: UIViewController, WebClientDelegate, UIWebViewDelegate {
         let urlString = "http://\(hostName):\(port)/aaa/bbb/ccc"
         let url = URL(string: urlString)!
         let request = URLRequest(url: url)
-        webView.loadRequest(request)
+        webView.load(request)
     }
     
     func webClient(_ client: WebClient, didNotResolveWithError error: Error) {
