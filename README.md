@@ -3,8 +3,6 @@ An experimental WebView based app template for iOS.
 
 **Under development.**
 
-- NSNetServices would be removed.
-
 Created by OOPer in cooperation with shlab.jp, on 2015/8/22.
 
 ===========================================================================

@@ -21,9 +21,12 @@ let kWebServerCouldNotBindOrEstablishNetService = 4
 let kWebServerDidNotPublish = 5
 
 @objc
-class WebServer: NSObject, WebServerRequestDelegate, NetServiceDelegate {
+class WebServer: NSObject, WebServerRequestDelegate {
     var connectionBag: Set<WebServerRequest> = []
-    var netService: NetService?
+//    var netService: NetService?
+    var listenerSocket: OOPSocket?
+    
+    private(set) var listeningPort: in_port_t = 0
 
     override init() {
         super.init()
@@ -34,44 +37,21 @@ class WebServer: NSObject, WebServerRequestDelegate, NetServiceDelegate {
         }
     }
     
-    func applicationWillTerminate(_ application: UIApplication) {
-        self.teardown()
-    }
-    
-    func netServiceDidPublish(_ sender: NetService) {
-        NSLog(#function)
-        self.netService = sender
-    }
-    func netService(_ sender: NetService, didNotPublish errorDict: [String: NSNumber]) {
-        NSLog(#function)
-        fatalError(errorDict.description)
-    }
-    
-    func netService(_ sender: NetService, didAcceptConnectionWith readStream: InputStream, outputStream writeStream: OutputStream) {
-        OperationQueue.main.addOperation {
-            CFReadStreamSetProperty(readStream, CFStreamPropertyKey(kCFStreamPropertyShouldCloseNativeSocket) , kCFBooleanTrue)
-            CFWriteStreamSetProperty(writeStream, CFStreamPropertyKey(kCFStreamPropertyShouldCloseNativeSocket), kCFBooleanTrue)
-            self.handleConnection(inputStream: readStream, outputStream: writeStream)
-        }
-    }
-    
     func setupServer() throws {
         
-        if self.netService != nil {
+        if self.listenerSocket != nil {
             // Calling [self run] more than once should be a NOP.
             return
-        } else {
-            
-            if self.netService == nil {
-                self.netService = NetService(domain: kWebServiceDomain, type: kWebServiceType, name: kWebServiceName, port: 0)
-                self.netService?.delegate = self
-            }
-            
-            if self.netService == nil {
-                self.teardown()
-                throw NSError(domain: WebServerErrorDomain, code: kWebServerCouldNotBindOrEstablishNetService, userInfo: nil)
+        }
+        self.listenerSocket = OOPSocket(forListening: .inet, .tcp) {s, addr, inputStream, outputStream in
+            OperationQueue.main.addOperation {
+                self.handleConnection(inputStream: inputStream, outputStream: outputStream)
             }
         }
+        try self.listenerSocket!.listen(.init("127.0.0.1", 0))
+        let localAddress = self.listenerSocket!.socketAddress!
+        print(localAddress.port)
+        self.listeningPort = localAddress.port
     }
     
     func run() {
@@ -80,8 +60,6 @@ class WebServer: NSObject, WebServerRequestDelegate, NetServiceDelegate {
         } catch let thisError {
             fatalError(thisError.localizedDescription)
         }
-        
-        self.netService!.publish(options: .listenForConnections)
     }
     
     func handleConnection(inputStream readStream: InputStream, outputStream writeStream: OutputStream) {
@@ -112,10 +90,9 @@ class WebServer: NSObject, WebServerRequestDelegate, NetServiceDelegate {
     }
     
     func teardown() {
-        if self.netService != nil {
-            self.netService!.stop()
-            self.netService = nil
-        }
+        self.listenerSocket?.invalidate()
+        self.listenerSocket = nil
+        self.listeningPort = 0
     }
     
     deinit {

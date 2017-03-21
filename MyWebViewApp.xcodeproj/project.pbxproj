@@ -19,6 +19,7 @@
 		D708F29C1B889C4700676A1C /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = D708F29B1B889C4700676A1C /* LICENSE.txt */; };
 		D70D034A1B8A80A80041D63F /* aaa.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D03491B8A80A70041D63F /* aaa.swift */; };
 		D70D03521B8B79340041D63F /* WebTemplateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D03511B8B79340041D63F /* WebTemplateTests.swift */; };
+		D70D6CB41E815A5300FE5014 /* OOPSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D6CB31E815A5300FE5014 /* OOPSocket.swift */; };
 		D74873571B849E110095E42F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873561B849E110095E42F /* AppDelegate.swift */; };
 		D74873591B849E110095E42F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873581B849E110095E42F /* ViewController.swift */; };
 		D748735C1B849E110095E42F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D748735A1B849E110095E42F /* Main.storyboard */; };
@@ -26,7 +27,6 @@
 		D74873611B849E110095E42F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D748735F1B849E110095E42F /* LaunchScreen.storyboard */; };
 		D74873691B849F260095E42F /* WebServerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873681B849F260095E42F /* WebServerRequest.swift */; };
 		D748736B1B849F4A0095E42F /* WebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D748736A1B849F4A0095E42F /* WebServer.swift */; };
-		D748736D1B849F760095E42F /* WebClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D748736C1B849F760095E42F /* WebClient.swift */; };
 		D748736F1B84B2A20095E42F /* HTTPStreamReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D748736E1B84B2A20095E42F /* HTTPStreamReceiver.swift */; };
 		D78D18391B8527A00026F024 /* HTTPValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D18381B8527A00026F024 /* HTTPValues.swift */; };
 		D78D183B1B85284C0026F024 /* Array+opt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D183A1B85284C0026F024 /* Array+opt.swift */; };
@@ -59,6 +59,7 @@
 		D70D034F1B8B79340041D63F /* MyWebViewAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyWebViewAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D70D03511B8B79340041D63F /* WebTemplateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebTemplateTests.swift; sourceTree = "<group>"; };
 		D70D03531B8B79340041D63F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D70D6CB31E815A5300FE5014 /* OOPSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OOPSocket.swift; sourceTree = "<group>"; };
 		D74873531B849E110095E42F /* MyWebViewApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWebViewApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D74873561B849E110095E42F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D74873581B849E110095E42F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -68,7 +69,6 @@
 		D74873621B849E110095E42F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D74873681B849F260095E42F /* WebServerRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebServerRequest.swift; sourceTree = "<group>"; };
 		D748736A1B849F4A0095E42F /* WebServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebServer.swift; sourceTree = "<group>"; };
-		D748736C1B849F760095E42F /* WebClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebClient.swift; sourceTree = "<group>"; };
 		D748736E1B84B2A20095E42F /* HTTPStreamReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPStreamReceiver.swift; sourceTree = "<group>"; };
 		D78D18381B8527A00026F024 /* HTTPValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPValues.swift; sourceTree = "<group>"; };
 		D78D183A1B85284C0026F024 /* Array+opt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+opt.swift"; sourceTree = "<group>"; };
@@ -108,6 +108,7 @@
 				D708F2261B87404A00676A1C /* NSData+suffix.swift */,
 				D708F2281B87491800676A1C /* NSMutableData+append.swift */,
 				D708F2981B888D1900676A1C /* OOPRegularExpression.swift */,
+				D70D6CB31E815A5300FE5014 /* OOPSocket.swift */,
 			);
 			name = OOPUtils;
 			sourceTree = "<group>";
@@ -155,7 +156,6 @@
 				D748736A1B849F4A0095E42F /* WebServer.swift */,
 				D7AF589F1B88C9CF00CF2042 /* WebProducer.swift */,
 				D74873681B849F260095E42F /* WebServerRequest.swift */,
-				D748736C1B849F760095E42F /* WebClient.swift */,
 				D748736E1B84B2A20095E42F /* HTTPStreamReceiver.swift */,
 				D708F1D61B85E45B00676A1C /* HTTPStreamTransmitter.swift */,
 				D78D18381B8527A00026F024 /* HTTPValues.swift */,
@@ -301,8 +301,8 @@
 				D708F2271B87404A00676A1C /* NSData+suffix.swift in Sources */,
 				D708F22B1B8749AD00676A1C /* HTTPStatus.swift in Sources */,
 				D74873591B849E110095E42F /* ViewController.swift in Sources */,
-				D748736D1B849F760095E42F /* WebClient.swift in Sources */,
 				D7AF58A01B88C9CF00CF2042 /* WebProducer.swift in Sources */,
+				D70D6CB41E815A5300FE5014 /* OOPSocket.swift in Sources */,
 				D708F2951B8882E700676A1C /* AppConstants.swift in Sources */,
 				D74873571B849E110095E42F /* AppDelegate.swift in Sources */,
 				D78D183B1B85284C0026F024 /* Array+opt.swift in Sources */,

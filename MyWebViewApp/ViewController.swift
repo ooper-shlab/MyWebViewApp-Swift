@@ -9,10 +9,8 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WebClientDelegate, WKUIDelegate, WKNavigationDelegate {
+class ViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
     weak var webView: WKWebView!
-    
-    var webClient: WebClient!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,34 +24,11 @@ class ViewController: UIViewController, WebClientDelegate, WKUIDelegate, WKNavig
         self.view!.addSubview(webView)
         self.webView = webView
         
-        webClient = WebClient()
-        webClient.delegate = self
-        webClient.searchForBrowsableDomains()
-    }
-    
-    func webClient(_ client: WebClient, didFindDomain domain: String) {
-        NSLog(#function)
-        if domain == kWebServiceDomain {
-            webClient.searchForServicesOfType(kWebServiceType, inDomain: domain, withName: kWebServiceName)
-        }
-    }
-    
-    func webClient(_ client: WebClient, didFindService service: NetService) {
-        NSLog(#function)
-        webClient.resolve(service)
-    }
-    
-    func webClient(_ client: WebClient, didResolveService service: NetService) {
-        let hostName = service.hostName!
-        let port = service.port
-        let urlString = "http://\(hostName):\(port)/aaa/bbb/ccc"
+        let port = (UIApplication.shared.delegate as! AppDelegate).serverPort
+        let urlString = "http://127.0.0.1:\(port)/aaa/bbb/ccc"
         let url = URL(string: urlString)!
         let request = URLRequest(url: url)
         webView.load(request)
-    }
-    
-    func webClient(_ client: WebClient, didNotResolveWithError error: Error) {
-        //
     }
 
     override func didReceiveMemoryWarning() {
