@@ -18,13 +18,14 @@ let WebServerRequestErrorDomain = "WebServerRequestErrorDomain"
 let kWebServerRequestReceivedTransmissionError = 1
 
 @objc
-class WebServerRequest: NSObject, HTTPStreamReceiverDelegate, HTTPStreamTransmitterDelegate {
+public class WebServerRequest: NSObject, HTTPStreamReceiverDelegate, HTTPStreamTransmitterDelegate {
     
     var receiver: HTTPStreamReceiver
     var transmitter: HTTPStreamTransmitter
     weak var delegate: WebServerRequestDelegate?
     
-    var userInfo: [String: AnyObject] = [:]
+    //Moved to `HTTPRequest`.
+//    var userInfo: [String: AnyObject] = [:]
     
     init(inputStream readStream: InputStream,
         outputStream writeStream: OutputStream,

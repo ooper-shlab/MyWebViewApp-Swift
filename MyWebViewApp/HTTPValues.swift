@@ -30,7 +30,7 @@ open class HTTPValues: CustomStringConvertible, Sequence,ExpressibleByDictionary
                 value = nil
             }
             self.append(value?.removingPercentEncoding,
-                forName: name.removingPercentEncoding!)
+                for: name.removingPercentEncoding!)
         }
     }
     init(caseInsensitive: Bool) {
@@ -41,10 +41,10 @@ open class HTTPValues: CustomStringConvertible, Sequence,ExpressibleByDictionary
     }
     
     open func append(_ item: HTTPValueItem) {
-        self.append(item.value, forName: item.name)
+        self.append(item.value, for: item.name)
     }
     
-    public func append(_ value: String?, forName name: String) {
+    public func append(_ value: String?, for name: String) {
         var name = name
         items.append((name: name, value: value))
         if caseInsensitive {name = name.lowercased()}
@@ -73,7 +73,7 @@ open class HTTPValues: CustomStringConvertible, Sequence,ExpressibleByDictionary
         set {
             let name = name
             remove(name)
-            self.append(newValue, forName: name)
+            self.append(newValue, for: name)
         }
     }
     
@@ -87,7 +87,7 @@ open class HTTPValues: CustomStringConvertible, Sequence,ExpressibleByDictionary
             let name = name
             remove(name)
             for value in newValue {
-                self.append(value, forName: name)
+                self.append(value, for: name)
             }
         }
     }
@@ -115,7 +115,7 @@ open class HTTPValues: CustomStringConvertible, Sequence,ExpressibleByDictionary
     public required init(dictionaryLiteral elements: (String, String?)...) {
         self.caseInsensitive = false
         for (name, value) in elements {
-            self.append(value, forName: name)
+            self.append(value, for: name)
         }
     }
 }

@@ -9,7 +9,7 @@
 import Foundation
 
 extension String {
-    var HTMLEntitiesEncoded: String {
+    var htmlEntitiesEncoded: String {
         struct My {
             static let dict = ["<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&apos;", "&":"&amp;"]
             static let pattern = try! OOPRegularExpression(pattern: "[<>\"'&]", options: []) {

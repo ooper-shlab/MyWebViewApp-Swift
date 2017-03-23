@@ -46,21 +46,22 @@ class HTTPStreamReceiver: NSObject, StreamDelegate {
     var path: String?
     var httpVersion: String?
     
-    private var _query: HTTPValues? = nil
-    var query: HTTPValues {
-        if _query != nil {
-            if let
-                path = self.path,
-                let component = URLComponents(string: path),
-                let queryString = component.query
-            {
-                _query = HTTPValues(query: queryString)
-            } else {
-                _query = HTTPValues()
-            }
-        }
-        return _query!
-    }
+    //Moved to `HTTPRequest`.
+//    private var _query: HTTPValues? = nil
+//    var query: HTTPValues {
+//        if _query != nil {
+//            if let
+//                path = self.path,
+//                let component = URLComponents(string: path),
+//                let queryString = component.query
+//            {
+//                _query = HTTPValues(query: queryString)
+//            } else {
+//                _query = HTTPValues()
+//            }
+//        }
+//        return _query!
+//    }
     
     init(istream: InputStream) {
         self.istream = istream
@@ -219,7 +220,7 @@ class HTTPStreamReceiver: NSObject, StreamDelegate {
                 if let index = line.range(of: ":") {
                     let name = line.substring(to: index.lowerBound)
                     let value = line.substring(from: index.upperBound).trimmingCharacters(in: spaces)
-                    self.headers.append(value, forName: name)
+                    self.headers.append(value, for: name)
                 }
             }
             lineNumber += 1

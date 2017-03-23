@@ -8,10 +8,6 @@
 
 import UIKit
 
-let kWebServiceType = "_http._tcp"
-let kWebServiceDomain = "local."
-let kWebServiceName = UIDevice.current.name
-
 let WebServerErrorDomain = "WebServerErrorDomain"
 let kWebServerCouldNotBindToIPv4Address = 1
 let kWebServerCouldNotBindToIPv6Address = 2
@@ -23,7 +19,6 @@ let kWebServerDidNotPublish = 5
 @objc
 class WebServer: NSObject, WebServerRequestDelegate {
     var connectionBag: Set<WebServerRequest> = []
-//    var netService: NetService?
     var listenerSocket: OOPSocket?
     
     private(set) var listeningPort: in_port_t = 0
@@ -73,20 +68,20 @@ class WebServer: NSObject, WebServerRequestDelegate {
             
     }
     
-    func webServerRequestDidProcessBody(_ request: WebServerRequest) {
+    func webServerRequestDidProcessBody(_ serverRequest: WebServerRequest) {
         NSLog(#function)
         let producer = WebProducer.currentProducer
-        producer.respondToRequest(request)
+        producer.produce(serverRequest)
     }
     
-    func webServerRequestDidFinish(_ request: WebServerRequest) {
+    func webServerRequestDidFinish(_ serverRequest: WebServerRequest) {
         NSLog(#function)
-        self.connectionBag.remove(request)
+        self.connectionBag.remove(serverRequest)
     }
     
-    func webServerRequest(_ request: WebServerRequest, didReceiveError error: Error) {
+    func webServerRequest(_ serverRequest: WebServerRequest, didReceiveError error: Error) {
         NSLog(error.localizedDescription)
-        self.connectionBag.remove(request)
+        self.connectionBag.remove(serverRequest)
     }
     
     func teardown() {

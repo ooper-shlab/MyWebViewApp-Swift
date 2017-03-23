@@ -8,23 +8,27 @@
 
 import Foundation
 
-let ACTER_PREFIX = "__$"
-class WebProducer {
+let PERFORMER_PREFIX = "__$"
+public protocol WebProducible {
+    func produce(_ request: WebServerRequest)
+}
+class WebProducer: WebProducible {
     private(set) static var _producer: WebProducer = WebProducer()
     class var currentProducer: WebProducer {
         return _producer
     }
     
-    func respondToRequest(_ request: WebServerRequest) {
+    func produce(_ request: WebServerRequest) {
+        if performerResponds(request) {
+            return
+        }
         let receiver = request.receiver
         let requestPath = receiver.path!
         let requestPathURL = URL(string: requestPath)!
-        if acterResponds(request) {
-            return
-        }
         let path = requestPathURL.path
         let resourceURL = Bundle.main.resourceURL!
-        let documentURL = resourceURL.appendingPathComponent(path)
+        let staticContentURL = resourceURL.appendingPathComponent("StaticContents", isDirectory: true)
+        let documentURL = staticContentURL.appendingPathComponent(path)
         var foundURL: URL? = nil
         let fileManager = FileManager.default
         var isDir: ObjCBool = false
@@ -56,26 +60,38 @@ class WebProducer {
         } else {
             transmitter.headers["Content-Type"] = "text/html"
             let responseHtml = "\(HTTPStatus.notFound.fullDescription)<br>" +
-            "Requested resource \(path.HTMLEntitiesEncoded) does not exist on this server."
+            "Requested resource \(path.htmlEntitiesEncoded) does not exist on this server."
             transmitter.addResponse(responseHtml)
         }
         transmitter.startTransmission()
     }
     
-    func acterResponds(_ request: WebServerRequest) -> Bool {
-        var pathComponents: [String] = URL(string: request.receiver.path!)!.pathComponents
+    func performerResponds(_ serverRequest: WebServerRequest) -> Bool {
+        var pathComponents: [String] = URL(string: serverRequest.receiver.path!)!.pathComponents
         pathComponents.removeFirst() // remove first "/"
         guard pathComponents.count >= 2 else {return false}
-        let method = pathComponents.popLast()! + ":"
-        print(method)
-        let className = ACTER_PREFIX + pathComponents.joined(separator: "$")
+        let methodName = pathComponents.popLast()! + ":"
+        let className = PERFORMER_PREFIX + pathComponents.joined(separator: "$")
         print(className)
-        print(NSStringFromClass(bbb.self))
-        if let classObj = NSClassFromString(className) as? NSObject.Type
-        , classObj.instancesRespond(to: Selector(method)) {
-            let actor = classObj.init()
-            actor.perform(Selector(method), with: request)
-            return true
+        if let classObj = NSClassFromString(className) as? NSObject.Type {
+            print(classObj)
+            let methodName2 = methodName + ":"
+            let selector = Selector(methodName)
+            let selector2 = Selector(methodName2)
+            if classObj.instancesRespond(to: selector) {
+                print(methodName)
+                let actor = classObj.init()
+                actor.perform(selector, with: serverRequest)
+                return true
+            } else if classObj.instancesRespond(to: selector2) {
+                print(methodName2)
+                let performer = classObj.init()
+                let request = HTTPRequest(serverRequest.receiver)
+                let response = HTTPResponse(serverRequest.transmitter)
+                performer.perform(selector2, with: request, with: response)
+                response.send()
+                return true
+            }
         }
         return false
     }

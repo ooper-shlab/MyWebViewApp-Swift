@@ -8,19 +8,14 @@
 
 import Foundation
 
-class ResponseProvider {
-    var length: Int {
-        fatalError("ResponseProvider is an abstract class: implement \(#function) in the subclass.")
-    }
-    var availableBytes: Int {
-        fatalError("ResponseProvider is an abstract class: implement \(#function) in the subclass.")
-    }
-    var finished: Bool {
-        fatalError("ResponseProvider is an abstract class: implement \(#function) in the subclass.")
-    }
-    func sendResponse(_ ostream: OutputStream, length: Int) -> Int {
-        fatalError("ResponseProvider is an abstract class: implement \(#function) in the subclass.")
-    }
+public protocol ResponseProvider {
+    var length: Int {get}
+    var availableBytes: Int {get}
+    var finished: Bool {get}
+    func sendResponse(_ ostream: OutputStream, length: Int) -> Int
+}
+
+public extension ResponseProvider {
     @discardableResult func sendResponse(_ ostream: OutputStream) -> Int {
         return sendResponse(ostream, length: self.availableBytes)
     }
@@ -37,16 +32,20 @@ class DataResponseProvider: ResponseProvider {
         self.data = string.data(using: .utf8)!
         self.offset = 0
     }
-    override var length: Int {
+    var length: Int {
         return data.count
     }
-    override var availableBytes: Int {
+    var availableBytes: Int {
         return data.count - offset
     }
-    override var finished: Bool {
+    var finished: Bool {
         return offset >= data.count
     }
-    override func sendResponse(_ ostream: OutputStream, length: Int) -> Int {
+    func sendResponse(_ ostream: OutputStream, length: Int) -> Int {
+        var length = length
+        if offset + length > data.count {
+            length = data.count - offset
+        }
         let lenSent = data.withUnsafeBytes {bytes in
             ostream.write(bytes + offset, maxLength: length)
         }
@@ -74,18 +73,21 @@ let kHTTPStreamTransmitterErrorDomain = "kHTTPStreamTransmitterErrorDomain"
 let kHTTPStreamTransmitterUnknownError = 1
 
 class HTTPStreamTransmitter: NSObject, StreamDelegate {
-    private let ostream: OutputStream
-    
-    weak var delegate: HTTPStreamTransmitterDelegate?
-    var transmissionStarted: Bool = false
-    var transmissionDidFinishNotified = false
     var headers: HTTPValues = HTTPValues(caseInsensitive: true)
-    
-    private var responses: [ResponseProvider] = []
     
     private var headerGenerated: Bool = false
     var status: HTTPStatus = .ok
     var httpVersion: String = "HTTP/1.1"
+    
+    private let ostream: OutputStream
+    
+    weak var delegate: HTTPStreamTransmitterDelegate?
+    private var transmissionStarted: Bool = false
+    private var transmissionDidFinishNotified = false
+    private var headerSent = false
+    
+    internal var responseHeader: ResponseProvider?
+    internal var responses: [ResponseProvider] = []
     
     init(ostream: OutputStream) {
         self.ostream = ostream
@@ -100,17 +102,12 @@ class HTTPStreamTransmitter: NSObject, StreamDelegate {
         self.ostream.remove(from: RunLoop.current, forMode: RunLoopMode.commonModes)
         self.ostream.close()
     }
-    
-    func sendResponse() {
-        let response = DataResponseProvider(string: "\r\nBonjour, le monde!")
-        self.addResponse(response)
-        self.startTransmission()
-    }
 
     @nonobjc func addResponse(_ string: String) {
         let response = DataResponseProvider(string: string)
         self.addResponse(response)
     }
+    
     @nonobjc func addResponse(_ data: Data) {
         let response = DataResponseProvider(data: data)
         self.addResponse(response)
@@ -122,33 +119,12 @@ class HTTPStreamTransmitter: NSObject, StreamDelegate {
     
     func startTransmission() {
         NSLog(#function)
-        self.addHeaderResponse()
+        if transmissionStarted {
+            return
+        }
         self.transmissionStarted = true
+        addHeaderResponse()
         self.transmit()
-    }
-    
-    func addHeaderResponse() {
-        NSLog(#function)
-        var data = Data()
-        let statusLine = "\(httpVersion) \(status.fullDescription)\r\n"
-        data.append(statusLine)
-        if headers["Content-Length"] == nil {
-            var length: Int = 0
-            for response in responses {
-                length += response.length
-            }
-            headers["Content-Length"] = String(length)
-        }
-        for header in headers {
-            if let value = header.value {
-                data.append("\(header.name): \(value)\r\n")
-            } else {
-                data.append("\(header.name): \r\n")
-            }
-        }
-        data.append("\r\n")
-        let response = DataResponseProvider(data: data)
-        responses.insert(response, at: 0)
     }
     
     func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
@@ -174,6 +150,9 @@ class HTTPStreamTransmitter: NSObject, StreamDelegate {
     func transmit() {
         NSLog(#function)
         if transmissionStarted {
+            while let response = responseHeader, !response.finished && ostream.hasSpaceAvailable {
+                response.sendResponse(ostream)
+            }
             while !responses.isEmpty && ostream.hasSpaceAvailable {
                 let response = responses.first!
                 response.sendResponse(ostream)
@@ -186,5 +165,31 @@ class HTTPStreamTransmitter: NSObject, StreamDelegate {
                 delegate?.transmitterDidFinishTransmission?(self)
             }
         }
+    }
+    
+    func addHeaderResponse() {
+        if headerGenerated {
+            return
+        }
+        NSLog(#function)
+        let contentLength = responses.reduce(0, {$0 + $1.length})
+        var data = Data()
+        let statusLine = "\(httpVersion) \(status.fullDescription)\r\n"
+        data.append(statusLine)
+        if headers["Content-Length"] == nil {
+            let length = contentLength
+            headers["Content-Length"] = String(length)
+        }
+        for header in headers {
+            if let value = header.value {
+                data.append("\(header.name): \(value)\r\n")
+            } else {
+                data.append("\(header.name): \r\n")
+            }
+        }
+        data.append("\r\n")
+        let response = DataResponseProvider(data: data)
+        responseHeader = response
+        headerGenerated = true
     }
 }

@@ -12,7 +12,6 @@
 		D708F2271B87404A00676A1C /* NSData+suffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2261B87404A00676A1C /* NSData+suffix.swift */; };
 		D708F2291B87491800676A1C /* NSMutableData+append.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2281B87491800676A1C /* NSMutableData+append.swift */; };
 		D708F22B1B8749AD00676A1C /* HTTPStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F22A1B8749AD00676A1C /* HTTPStatus.swift */; };
-		D708F22D1B875E8000676A1C /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = D708F22C1B875E8000676A1C /* index.html */; };
 		D708F2951B8882E700676A1C /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2941B8882E700676A1C /* AppConstants.swift */; };
 		D708F2971B88890D00676A1C /* String+HTML.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2961B88890D00676A1C /* String+HTML.swift */; };
 		D708F2991B888D1900676A1C /* OOPRegularExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = D708F2981B888D1900676A1C /* OOPRegularExpression.swift */; };
@@ -20,6 +19,9 @@
 		D70D034A1B8A80A80041D63F /* aaa.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D03491B8A80A70041D63F /* aaa.swift */; };
 		D70D03521B8B79340041D63F /* WebTemplateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D03511B8B79340041D63F /* WebTemplateTests.swift */; };
 		D70D6CB41E815A5300FE5014 /* OOPSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70D6CB31E815A5300FE5014 /* OOPSocket.swift */; };
+		D739030F1E829DAB005E6F10 /* StaticContents in Resources */ = {isa = PBXBuildFile; fileRef = D739030E1E829DAB005E6F10 /* StaticContents */; };
+		D73903111E83F2BD005E6F10 /* HTTPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73903101E83F2BD005E6F10 /* HTTPRequest.swift */; };
+		D73903131E840297005E6F10 /* HTTPResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73903121E840297005E6F10 /* HTTPResponse.swift */; };
 		D74873571B849E110095E42F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873561B849E110095E42F /* AppDelegate.swift */; };
 		D74873591B849E110095E42F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74873581B849E110095E42F /* ViewController.swift */; };
 		D748735C1B849E110095E42F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D748735A1B849E110095E42F /* Main.storyboard */; };
@@ -50,7 +52,6 @@
 		D708F2261B87404A00676A1C /* NSData+suffix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+suffix.swift"; sourceTree = "<group>"; };
 		D708F2281B87491800676A1C /* NSMutableData+append.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableData+append.swift"; sourceTree = "<group>"; };
 		D708F22A1B8749AD00676A1C /* HTTPStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPStatus.swift; sourceTree = "<group>"; };
-		D708F22C1B875E8000676A1C /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		D708F2941B8882E700676A1C /* AppConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		D708F2961B88890D00676A1C /* String+HTML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+HTML.swift"; sourceTree = "<group>"; };
 		D708F2981B888D1900676A1C /* OOPRegularExpression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OOPRegularExpression.swift; sourceTree = "<group>"; };
@@ -60,6 +61,9 @@
 		D70D03511B8B79340041D63F /* WebTemplateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebTemplateTests.swift; sourceTree = "<group>"; };
 		D70D03531B8B79340041D63F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D70D6CB31E815A5300FE5014 /* OOPSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OOPSocket.swift; sourceTree = "<group>"; };
+		D739030E1E829DAB005E6F10 /* StaticContents */ = {isa = PBXFileReference; lastKnownFileType = folder; path = StaticContents; sourceTree = "<group>"; };
+		D73903101E83F2BD005E6F10 /* HTTPRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPRequest.swift; sourceTree = "<group>"; };
+		D73903121E840297005E6F10 /* HTTPResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPResponse.swift; sourceTree = "<group>"; };
 		D74873531B849E110095E42F /* MyWebViewApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWebViewApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D74873561B849E110095E42F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D74873581B849E110095E42F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -93,14 +97,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D708F22E1B87618800676A1C /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				D708F22C1B875E8000676A1C /* index.html */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
 		D708F29A1B888D3600676A1C /* OOPUtils */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,12 +109,12 @@
 			name = OOPUtils;
 			sourceTree = "<group>";
 		};
-		D70D03481B8A808D0041D63F /* Acters */ = {
+		D70D03481B8A808D0041D63F /* Performers */ = {
 			isa = PBXGroup;
 			children = (
 				D70D03491B8A80A70041D63F /* aaa.swift */,
 			);
-			name = Acters;
+			name = Performers;
 			sourceTree = "<group>";
 		};
 		D70D03501B8B79340041D63F /* MyWebViewAppTests */ = {
@@ -161,9 +157,11 @@
 				D78D18381B8527A00026F024 /* HTTPValues.swift */,
 				D708F2241B873FF200676A1C /* HTTPConstants.swift */,
 				D708F22A1B8749AD00676A1C /* HTTPStatus.swift */,
+				D73903101E83F2BD005E6F10 /* HTTPRequest.swift */,
+				D73903121E840297005E6F10 /* HTTPResponse.swift */,
 				D708F2941B8882E700676A1C /* AppConstants.swift */,
 				D708F2961B88890D00676A1C /* String+HTML.swift */,
-				D70D03481B8A808D0041D63F /* Acters */,
+				D70D03481B8A808D0041D63F /* Performers */,
 				D708F29A1B888D3600676A1C /* OOPUtils */,
 				D74873561B849E110095E42F /* AppDelegate.swift */,
 				D74873581B849E110095E42F /* ViewController.swift */,
@@ -171,7 +169,7 @@
 				D748735D1B849E110095E42F /* Assets.xcassets */,
 				D748735F1B849E110095E42F /* LaunchScreen.storyboard */,
 				D74873621B849E110095E42F /* Info.plist */,
-				D708F22E1B87618800676A1C /* Resources */,
+				D739030E1E829DAB005E6F10 /* StaticContents */,
 			);
 			path = MyWebViewApp;
 			sourceTree = "<group>";
@@ -265,8 +263,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D739030F1E829DAB005E6F10 /* StaticContents in Resources */,
 				D74873611B849E110095E42F /* LaunchScreen.storyboard in Resources */,
-				D708F22D1B875E8000676A1C /* index.html in Resources */,
 				D748735E1B849E110095E42F /* Assets.xcassets in Resources */,
 				D708F29C1B889C4700676A1C /* LICENSE.txt in Resources */,
 				D748735C1B849E110095E42F /* Main.storyboard in Resources */,
@@ -300,10 +298,12 @@
 				D74873691B849F260095E42F /* WebServerRequest.swift in Sources */,
 				D708F2271B87404A00676A1C /* NSData+suffix.swift in Sources */,
 				D708F22B1B8749AD00676A1C /* HTTPStatus.swift in Sources */,
+				D73903131E840297005E6F10 /* HTTPResponse.swift in Sources */,
 				D74873591B849E110095E42F /* ViewController.swift in Sources */,
 				D7AF58A01B88C9CF00CF2042 /* WebProducer.swift in Sources */,
 				D70D6CB41E815A5300FE5014 /* OOPSocket.swift in Sources */,
 				D708F2951B8882E700676A1C /* AppConstants.swift in Sources */,
+				D73903111E83F2BD005E6F10 /* HTTPRequest.swift in Sources */,
 				D74873571B849E110095E42F /* AppDelegate.swift in Sources */,
 				D78D183B1B85284C0026F024 /* Array+opt.swift in Sources */,
 			);
