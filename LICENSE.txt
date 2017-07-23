@@ -1,5 +1,5 @@
 MyWebViewApp: An experimental WebView based app template for iOS.
-Version:  1.0 beta-2
+Version:  1.0 (s4r1-beta)
 
 Copyright (c) 2015, 2017 OOPer(NAGATA, Atsuyuki)
 All rights reserved.

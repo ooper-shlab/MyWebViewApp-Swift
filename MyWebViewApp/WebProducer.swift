@@ -80,8 +80,8 @@ class WebProducer: WebProducible {
             let selector2 = Selector(methodName2)
             if classObj.instancesRespond(to: selector) {
                 print(methodName)
-                let actor = classObj.init()
-                actor.perform(selector, with: serverRequest)
+                let performer = classObj.init()
+                performer.perform(selector, with: serverRequest)
                 return true
             } else if classObj.instancesRespond(to: selector2) {
                 print(methodName2)

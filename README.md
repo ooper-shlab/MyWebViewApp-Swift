@@ -1,4 +1,4 @@
-#MyWebViewApp
+# MyWebViewApp
 An experimental WebView based app template for iOS.
 
 **Under development.**
@@ -6,12 +6,12 @@ An experimental WebView based app template for iOS.
 Created by OOPer in cooperation with shlab.jp, on 2015/8/22.
 
 ===========================================================================
-BUILD REQUIREMENTS:
+### BUILD REQUIREMENTS:
 
-Xcode 8.2.1, iOS SDK 10
+Xcode 9 beta 3, iOS SDK 11
 
 ===========================================================================
-RUNTIME REQUIREMENTS:
+### RUNTIME REQUIREMENTS:
 
 iOS 8.0
 
