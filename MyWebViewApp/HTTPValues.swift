@@ -23,8 +23,8 @@ open class HTTPValues: CustomStringConvertible, Sequence,ExpressibleByDictionary
             var name: String
             var value: String?
             if let equalPos = q.range(of: "=") {
-                name = q.substring(to: equalPos.lowerBound)
-                value = q.substring(from: equalPos.upperBound)
+                name = String(q[..<equalPos.lowerBound])
+                value = String(q[equalPos.upperBound...])
             } else {
                 name = q
                 value = nil

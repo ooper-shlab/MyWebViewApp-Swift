@@ -10,4 +10,4 @@ import Foundation
 
 let CR = UInt8(ascii: "\r")
 let LF = UInt8(ascii: "\n")
-let emptyLineData = Data(bytes: [CR, LF, CR, LF])
+let emptyLineData = Data([CR, LF, CR, LF])

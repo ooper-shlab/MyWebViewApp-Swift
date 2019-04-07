@@ -47,7 +47,7 @@ class DataResponseProvider: ResponseProvider {
             length = data.count - offset
         }
         let lenSent = data.withUnsafeBytes {bytes in
-            ostream.write(bytes + offset, maxLength: length)
+            ostream.write(bytes.bindMemory(to: UInt8.self).baseAddress! + offset, maxLength: length)
         }
         offset += lenSent
         return lenSent
@@ -95,11 +95,11 @@ class HTTPStreamTransmitter: NSObject, StreamDelegate {
         self.ostream.delegate = self
     }
     func run() {
-        self.ostream.schedule(in: RunLoop.current, forMode: RunLoopMode.commonModes)
+        self.ostream.schedule(in: .current, forMode: .common)
         self.ostream.open()
     }
     deinit {
-        self.ostream.remove(from: RunLoop.current, forMode: RunLoopMode.commonModes)
+        self.ostream.remove(from: .current, forMode: .common)
         self.ostream.close()
     }
 

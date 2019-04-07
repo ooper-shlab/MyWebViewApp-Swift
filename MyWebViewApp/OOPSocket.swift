@@ -101,8 +101,8 @@ public class OOPSocket {
         }
         
         internal init(data: Data) {
-            self = data.withUnsafeBytes {sockaddrPtr in
-                .init(sockaddrPtr)
+            self = data.withUnsafeBytes {sockaddrBytes in
+                .init(sockaddrBytes.bindMemory(to: sockaddr.self).baseAddress!)
             }
         }
         

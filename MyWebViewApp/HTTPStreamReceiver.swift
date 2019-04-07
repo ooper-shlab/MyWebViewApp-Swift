@@ -70,13 +70,13 @@ class HTTPStreamReceiver: NSObject, StreamDelegate {
     }
     
     deinit {
-        self.istream.remove(from: RunLoop.current, forMode: RunLoopMode.commonModes)
+        self.istream.remove(from: .current, forMode: .common)
         self.istream.close()
     }
     
     func run() {
         NSLog(#function)
-        istream.schedule(in: RunLoop.current, forMode: RunLoopMode.commonModes)
+        istream.schedule(in: .current, forMode: .common)
         istream.open()
         self.receive()
     }
@@ -218,8 +218,8 @@ class HTTPStreamReceiver: NSObject, StreamDelegate {
                 NSLog("methods=%@", methods)
             } else {
                 if let index = line.range(of: ":") {
-                    let name = line.substring(to: index.lowerBound)
-                    let value = line.substring(from: index.upperBound).trimmingCharacters(in: spaces)
+                    let name = String(line[..<index.lowerBound])
+                    let value = line[index.upperBound...].trimmingCharacters(in: spaces)
                     self.headers.append(value, for: name)
                 }
             }
